@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>MedOfficer Jobs India | Verified PSU & Government MBBS Jobs</title>
+    <meta
+      name="description"
+      content="Premium Medical Officer jobs platform for India. Verified MBBS, GDMO, Factory Medical Officer and PSU health recruitment with official links and daily updates."
+    />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Fraunces:wght@600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body>
+    <div class="page-shell">
+      <header class="topbar">
+        <a class="brand" href="#top" aria-label="MedOfficer Jobs India home">
+          <span class="brand-mark">M</span>
+          <span>
+            <strong>MedOfficer Jobs India</strong>
+            <small>Verified MBBS roles</small>
+          </span>
+        </a>
+        <nav class="topnav" aria-label="Primary">
+          <a href="#featured">Featured</a>
+          <a href="#psu">PSU Jobs</a>
+          <a href="#closing">Closing Soon</a>
+          <a href="#latest">Latest Verified</a>
+        </nav>
+      </header>
+
+      <main id="top">
+        <section class="hero">
+          <div class="hero-copy glass-panel">
+            <p class="eyebrow">Medical Officer jobs, built like a real product</p>
+            <h1>Premium PSU and government MBBS job discovery for India.</h1>
+            <p class="hero-text">
+              Clean, verified, official-source-first listings for Medical Officer,
+              GDMO, Factory Medical Officer, Occupational Health Doctor and
+              Industrial Medical Officer roles.
+            </p>
+
+            <form class="search-panel" id="searchForm">
+              <label class="search-field">
+                <span class="label">Search role, organization, state</span>
+                <input
+                  id="searchInput"
+                  type="search"
+                  placeholder="Try NTPC, Telangana, Medical Officer, Interview..."
+                  autocomplete="off"
+                />
+              </label>
+
+              <div class="filter-grid">
+                <label>
+                  <span class="label">State</span>
+                  <select id="stateFilter"></select>
+                </label>
+                <label>
+                  <span class="label">Organization</span>
+                  <select id="orgFilter"></select>
+                </label>
+                <label>
+                  <span class="label">Sector</span>
+                  <select id="sectorFilter"></select>
+                </label>
+                <label>
+                  <span class="label">Selection</span>
+                  <select id="modeFilter"></select>
+                </label>
+                <label>
+                  <span class="label">Salary</span>
+                  <select id="salaryFilter"></select>
+                </label>
+                <label>
+                  <span class="label">Status</span>
+                  <select id="statusFilter"></select>
+                </label>
+              </div>
+
+              <div class="chip-row" id="quickFilters" aria-label="Quick filters"></div>
+            </form>
+          </div>
+
+          <aside class="hero-side glass-panel">
+            <div class="metrics">
+              <article>
+                <span id="activeCount">0</span>
+                <small>Active curated roles</small>
+              </article>
+              <article>
+                <span id="verifiedCount">0</span>
+                <small>Verified official-source listings</small>
+              </article>
+              <article>
+                <span id="sourceCount">0</span>
+                <small>Tracked official source groups</small>
+              </article>
+            </div>
+            <div class="trust-stack">
+              <h2>Why this version feels different</h2>
+              <ul>
+                <li>Official notification PDFs and apply pages front and center</li>
+                <li>Last checked times and source badges on every listing</li>
+                <li>Expiry logic removes stale entries from premium surfaces</li>
+                <li>Focused homepage with high-signal jobs only</li>
+              </ul>
+              <p class="snapshot-note">
+                Seeded with a curated official-source snapshot while the live scraper pipeline is wired in.
+              </p>
+            </div>
+          </aside>
+        </section>
+
+        <section class="strip" aria-label="Platform principles">
+          <div>
+            <strong>Real useful jobs</strong>
+            <span>Curated for MBBS-based government and PSU opportunities</span>
+          </div>
+          <div>
+            <strong>Trust first</strong>
+            <span>No dummy links, no vague recruiters, no scraped clutter</span>
+          </div>
+          <div>
+            <strong>Daily-refresh ready</strong>
+            <span>Designed for official-source-first scraping and dedupe</span>
+          </div>
+        </section>
+
+        <section id="featured" class="section">
+          <div class="section-head">
+            <div>
+              <p class="eyebrow">Featured active jobs</p>
+              <h2>High-signal opportunities worth opening first</h2>
+            </div>
+            <span class="section-meta" id="resultsSummary">Loading jobs...</span>
+          </div>
+          <div class="job-grid" id="featuredGrid"></div>
+        </section>
+
+        <section id="psu" class="section split-section">
+          <div class="section-head">
+            <div>
+              <p class="eyebrow">PSU jobs</p>
+              <h2>Industrial and public sector medical roles</h2>
+            </div>
+          </div>
+          <div class="mini-grid" id="psuGrid"></div>
+        </section>
+
+        <section class="section compact-section">
+          <div class="section-head">
+            <div>
+              <p class="eyebrow">Regional shortcuts</p>
+              <h2>Telangana and Andhra Pradesh quick filters</h2>
+            </div>
+          </div>
+          <div class="quick-state-grid">
+            <button class="region-card" data-region="Telangana">
+              <strong>Telangana</strong>
+              <span>DME, HMFW, teaching hospitals, DHS-linked roles</span>
+            </button>
+            <button class="region-card" data-region="Andhra Pradesh">
+              <strong>Andhra Pradesh</strong>
+              <span>HMFW, DMHO, district health and medical education roles</span>
+            </button>
+            <button class="region-card" data-region="All India">
+              <strong>All India</strong>
+              <span>PSU and central-government opportunities across India</span>
+            </button>
+          </div>
+        </section>
+
+        <section id="closing" class="section">
+          <div class="section-head">
+            <div>
+              <p class="eyebrow">Closing soon</p>
+              <h2>Deadlines coming up next</h2>
+            </div>
+          </div>
+          <div class="job-grid compact-grid" id="closingGrid"></div>
+        </section>
+
+        <section id="latest" class="section">
+          <div class="section-head">
+            <div>
+              <p class="eyebrow">Latest verified jobs</p>
+              <h2>Freshly checked official listings</h2>
+            </div>
+          </div>
+          <div class="job-grid compact-grid" id="latestGrid"></div>
+        </section>
+      </main>
+
+      <footer class="footer">
+        <div>
+          <strong>MedOfficer Jobs India</strong>
+          <p>Premium discovery for Medical Officer and MBBS-based government jobs.</p>
+        </div>
+        <div>
+          <span>Official links only</span>
+          <span>Daily source refresh ready</span>
+          <span>Curated for India</span>
+        </div>
+      </footer>
+    </div>
+
+    <script src="./jobs-data.js"></script>
+    <script src="./app.js"></script>
+  </body>
+</html>

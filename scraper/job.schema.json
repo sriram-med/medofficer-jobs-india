@@ -1,0 +1,57 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "MedOfficerJobsListing",
+  "type": "object",
+  "required": [
+    "id",
+    "organization",
+    "title",
+    "location",
+    "state",
+    "salary",
+    "qualification",
+    "lastDate",
+    "selectionMode",
+    "sector",
+    "tags",
+    "verified",
+    "sourceName",
+    "sourceType",
+    "sourceConfidence",
+    "lastChecked",
+    "officialNotification",
+    "applyLink"
+  ],
+  "properties": {
+    "id": { "type": "string" },
+    "organization": { "type": "string" },
+    "title": { "type": "string" },
+    "location": { "type": "string" },
+    "state": { "type": "string" },
+    "salary": { "type": "string" },
+    "salaryBand": { "type": "string" },
+    "qualification": { "type": "string" },
+    "vacancies": { "type": "string" },
+    "lastDate": { "type": "string", "format": "date" },
+    "postedDate": { "type": "string", "format": "date" },
+    "selectionMode": { "type": "string" },
+    "sector": { "type": "string", "enum": ["PSU", "Govt"] },
+    "tags": {
+      "type": "array",
+      "items": { "type": "string" }
+    },
+    "verified": { "type": "boolean" },
+    "sourceName": { "type": "string" },
+    "sourceType": { "type": "string" },
+    "sourceConfidence": {
+      "type": "string",
+      "enum": ["High", "Medium", "Low", "Watchlist"]
+    },
+    "lastChecked": { "type": "string", "format": "date-time" },
+    "officialNotification": { "type": "string", "format": "uri" },
+    "applyLink": { "type": "string", "format": "uri" },
+    "summary": { "type": "string" },
+    "featured": { "type": "boolean" }
+  },
+  "additionalProperties": false
+}
