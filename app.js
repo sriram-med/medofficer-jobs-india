@@ -299,3 +299,16 @@ function init() {
 }
 
 init();
+const refreshBtn = document.querySelector("#refreshListingsBtn");
+const refreshStatus = document.querySelector("#refreshStatus");
+
+if (refreshBtn) {
+  refreshBtn.addEventListener("click", async () => {
+    refreshStatus.textContent = "Refreshing latest listings...";
+    try {
+      window.location.reload();
+    } catch (error) {
+      refreshStatus.textContent = "Refresh failed.";
+    }
+  });
+}
