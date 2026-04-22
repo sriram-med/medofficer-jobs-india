@@ -177,3 +177,94 @@ INSERT INTO organizations (name, short_name, org_type, website, state) VALUES
   ('Ex-Servicemen Contributory Health Scheme','ECHS','GOVT','https://echs.gov.in','Delhi'),
   ('Central Government Health Scheme','CGHS','GOVT','https://cghs.gov.in','Delhi')
 ON CONFLICT DO NOTHING;
+
+-- ── Refresh Runs (precomputed operational metrics per refresh cycle) ─────────
+CREATE TABLE IF NOT EXISTS refresh_runs (
+  id                          UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+  started_at                  TIMESTAMPTZ NOT NULL,
+  ended_at                    TIMESTAMPTZ,
+  source_success_rate         NUMERIC(5,2) NOT NULL DEFAULT 0,
+  failed_source_count         INT NOT NULL DEFAULT 0,
+  refresh_duration_seconds    INT NOT NULL DEFAULT 0,
+  jobs_new                    INT NOT NULL DEFAULT 0,
+  jobs_changed                INT NOT NULL DEFAULT 0,
+  jobs_expired                INT NOT NULL DEFAULT 0,
+  duplicate_suppression_count INT NOT NULL DEFAULT 0,
+  stale_source_count          INT NOT NULL DEFAULT 0,
+  created_at                  TIMESTAMPTZ NOT NULL DEFAULT NOW()
+);
+
+CREATE INDEX IF NOT EXISTS idx_refresh_runs_ended_at ON refresh_runs (ended_at DESC);
+
+-- ── Public platform stats view ───────────────────────────────────────────────
+CREATE OR REPLACE VIEW public_stats_view AS
+SELECT
+  COUNT(*) FILTER (WHERE j.is_active) AS active_jobs,
+  COUNT(*) FILTER (WHERE j.created_at >= NOW() - INTERVAL '24 hours') AS new_24h,
+  COUNT(*) FILTER (WHERE j.created_at >= NOW() - INTERVAL '7 days') AS new_7d,
+  COUNT(*) FILTER (
+    WHERE j.is_active
+      AND j.last_date IS NOT NULL
+      AND j.last_date >= CURRENT_DATE
+      AND j.last_date <= CURRENT_DATE + INTERVAL '3 days'
+  ) AS closing_soon,
+  COUNT(*) FILTER (WHERE j.is_active AND o.org_type = 'PSU') AS psu_count,
+  COUNT(*) FILTER (WHERE j.is_active AND j.is_central) AS central_count,
+  COUNT(*) FILTER (WHERE j.is_active AND NOT j.is_central) AS state_count,
+  COUNT(*) FILTER (WHERE j.is_active AND lower(j.location_state) IN ('telangana')) AS telangana_count,
+  COUNT(*) FILTER (
+    WHERE j.is_active
+      AND lower(j.location_state) IN ('andhra pradesh', 'andhra', 'ap')
+  ) AS andhra_pradesh_count,
+  (SELECT COUNT(*) FROM scrape_sources s WHERE s.is_active) AS official_sources_tracked,
+  (SELECT MAX(l.ended_at) FROM scrape_logs l WHERE l.status IN ('success', 'partial')) AS last_platform_refresh
+FROM jobs j
+LEFT JOIN organizations o ON o.id = j.organization_id;
+
+-- ── Admin ops stats view ─────────────────────────────────────────────────────
+CREATE OR REPLACE VIEW admin_ops_stats_view AS
+WITH latest_run AS (
+  SELECT *
+  FROM refresh_runs rr
+  ORDER BY COALESCE(rr.ended_at, rr.started_at) DESC
+  LIMIT 1
+),
+fallback AS (
+  SELECT
+    ROUND(
+      100.0 * (
+        COUNT(*) FILTER (WHERE sl.status IN ('success', 'partial'))::NUMERIC /
+        NULLIF(COUNT(*), 0)
+      ),
+      2
+    ) AS source_success_rate,
+    COUNT(*) FILTER (WHERE sl.status = 'failed') AS failed_source_count,
+    COALESCE(EXTRACT(EPOCH FROM (MAX(sl.ended_at) - MAX(sl.started_at)))::INT, 0) AS refresh_duration_seconds,
+    COALESCE(SUM(sl.jobs_new), 0) AS jobs_new,
+    COALESCE(SUM(sl.jobs_updated), 0) AS jobs_changed,
+    0::INT AS jobs_expired,
+    0::INT AS duplicate_suppression_count,
+    COUNT(*) FILTER (
+      WHERE src.is_active
+        AND src.last_scraped_at IS NOT NULL
+        AND src.last_scraped_at < NOW() - make_interval(hours => src.scrape_interval_hours * 2)
+    ) AS stale_source_count,
+    MAX(sl.started_at) AS run_started_at,
+    MAX(sl.ended_at) AS run_ended_at
+  FROM scrape_logs sl
+  LEFT JOIN scrape_sources src ON src.id = sl.source_id
+  WHERE sl.started_at >= NOW() - INTERVAL '24 hours'
+)
+SELECT
+  COALESCE(lr.source_success_rate, fb.source_success_rate, 0) AS source_success_rate,
+  COALESCE(lr.failed_source_count, fb.failed_source_count, 0) AS failed_source_count,
+  COALESCE(lr.refresh_duration_seconds, fb.refresh_duration_seconds, 0) AS refresh_duration_seconds,
+  COALESCE(lr.jobs_new, fb.jobs_new, 0) AS jobs_new,
+  COALESCE(lr.jobs_changed, fb.jobs_changed, 0) AS jobs_changed,
+  COALESCE(lr.jobs_expired, fb.jobs_expired, 0) AS jobs_expired,
+  COALESCE(lr.duplicate_suppression_count, fb.duplicate_suppression_count, 0) AS duplicate_suppression_count,
+  COALESCE(lr.stale_source_count, fb.stale_source_count, 0) AS stale_source_count,
+  COALESCE(lr.started_at, fb.run_started_at) AS run_started_at,
+  COALESCE(lr.ended_at, fb.run_ended_at) AS run_ended_at
+FROM fallback fb
+LEFT JOIN latest_run lr ON TRUE;
