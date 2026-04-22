@@ -1,0 +1,12 @@
+{
+  "$schema": "https://railway.app/railway.schema.json",
+  "deploy": {
+    "startCommand": "node backend/src/refresh/runAll.js",
+    "restartPolicyType": "ON_FAILURE",
+    "restartPolicyMaxRetries": 5
+  },
+  "cron": {
+    "schedule": "7,22,37,52 * * * *",
+    "command": "node backend/src/refresh/runAll.js"
+  }
+}

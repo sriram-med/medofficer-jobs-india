@@ -383,3 +383,47 @@ VALUES (
 | RDS snapshots | Automatic | Configured in RDS (7-day retention) |
 | Review scrape logs | Weekly | Admin dashboard or S3 |
 | Expire old jobs | Weekly | `UPDATE jobs SET is_active=FALSE WHERE last_date < CURRENT_DATE - 7` |
+
+---
+
+## Scheduled Refresh Worker (Render / Railway)
+
+Use the backend refresh worker command for scheduled syncs:
+
+```bash
+node backend/src/refresh/runAll.js
+```
+
+Required environment variables:
+
+- `DATABASE_URL` (preferred) or `DB_HOST`, `DB_PORT`, `DB_NAME`, `DB_USER`, `DB_PASSWORD`
+- `DB_SSL=true` for managed PostgreSQL providers
+
+### Render cron service
+
+A ready-to-use config is available at `deploy/render.yaml`.
+
+- Schedule: `7,22,37,52 * * * *`
+- Start command: `node backend/src/refresh/runAll.js`
+
+### Railway cron service
+
+A ready-to-use config is available at `deploy/railway.json`.
+
+- Schedule: `7,22,37,52 * * * *`
+- Command: `node backend/src/refresh/runAll.js`
+
+### Worker behavior
+
+Each run:
+
+1. Acquires a PostgreSQL advisory lock (prevents overlapping runs across instances).
+2. Executes refresh tasks.
+3. Recomputes job stats.
+4. Evaluates source health.
+5. Writes a structured summary artifact to `artifacts/refresh-summary.json` with:
+   - `new`
+   - `updated`
+   - `expired`
+   - `duplicates`
+   - `failures`

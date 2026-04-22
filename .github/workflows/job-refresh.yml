@@ -31,10 +31,18 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
-      - name: Run job refresh script
+      - name: Run backend refresh worker
         env:
           DATABASE_URL: ${{ secrets.DATABASE_URL }}
-        run: npm run refresh:jobs
+          DB_SSL: ${{ secrets.DB_SSL }}
+        run: node backend/src/refresh/runAll.js
+
+      - name: Upload refresh run summary
+        uses: actions/upload-artifact@v4
+        with:
+          name: refresh-run-summary
+          path: artifacts/refresh-summary.json
+          if-no-files-found: error
 
       - name: Commit updated data
         run: |

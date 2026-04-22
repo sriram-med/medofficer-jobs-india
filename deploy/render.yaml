@@ -1,0 +1,12 @@
+services:
+  - type: cron
+    name: medofficer-refresh-worker
+    runtime: node
+    schedule: "7,22,37,52 * * * *"
+    buildCommand: npm ci
+    startCommand: node backend/src/refresh/runAll.js
+    envVars:
+      - key: DATABASE_URL
+        sync: false
+      - key: DB_SSL
+        value: "true"
