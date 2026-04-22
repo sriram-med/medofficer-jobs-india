@@ -1,185 +1,232 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1.0"/>
-<title>MedOfficer Jobs - Verified Govt Medical Officer Jobs India</title>
-<meta name="description" content="Verified government Medical Officer, GDMO, PSU Doctor and NHM jobs across India. Telangana, Andhra Pradesh, ESIC, AIIMS, Railways and more."/>
-<style>
-*{box-sizing:border-box;margin:0;padding:0}body{font-family:'Segoe UI',system-ui,sans-serif;background:#0a0f1e;color:#e8edf8;min-height:100vh}a{color:inherit;text-decoration:none}
-.nav{background:rgba(10,15,30,.95);backdrop-filter:blur(20px);border-bottom:1px solid rgba(255,255,255,.08);padding:0 24px;height:60px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100}
-.logo{font-size:1.2rem;font-weight:800;letter-spacing:-.02em}.logo em{color:#00c9a7;font-style:normal}
-.nav-links a{padding:6px 12px;border-radius:8px;font-size:.875rem;color:#9aa5c0;margin-left:4px}.nav-links a:hover{color:#e8edf8;background:rgba(255,255,255,.06)}
-.hero{min-height:85vh;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:60px 24px 40px;background:radial-gradient(ellipse 70% 50% at 50% 0%,rgba(0,201,167,.13),transparent)}
-.badge{display:inline-flex;align-items:center;gap:8px;padding:6px 16px;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);border-radius:100px;font-size:.8rem;color:#00c9a7;margin-bottom:22px}
-.dot{width:7px;height:7px;border-radius:50%;background:#00c9a7;box-shadow:0 0 8px #00c9a7;animation:pulse 2s infinite}@keyframes pulse{50%{opacity:.4;transform:scale(.85)}}
-h1{font-size:clamp(2.2rem,5.5vw,3.8rem);font-weight:800;letter-spacing:-.04em;line-height:1.08;margin-bottom:16px}h1 em{font-style:normal;color:#00c9a7}
-.sub{color:#9aa5c0;font-size:1rem;margin-bottom:30px;line-height:1.7}
-.search-wrap{max-width:520px;margin:0 auto 20px}
-.search-box{display:flex;align-items:center;background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.12);border-radius:100px;padding:6px 6px 6px 20px;transition:.2s}
-.search-box:focus-within{border-color:#00c9a7;box-shadow:0 0 0 3px rgba(0,201,167,.15)}
-.search-box input{flex:1;background:none;border:none;outline:none;color:#e8edf8;font-size:.9rem;padding:8px 0}.search-box input::placeholder{color:#5c6882}
-.search-box button{padding:10px 22px;background:#00c9a7;color:#0a0f1e;border:none;border-radius:100px;font-weight:700;cursor:pointer;white-space:nowrap;transition:.2s}.search-box button:hover{background:#00dfc0}
-.tags{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;margin-bottom:40px}
-.tag{padding:5px 14px;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);border-radius:100px;font-size:.78rem;color:#9aa5c0;cursor:pointer;transition:.2s}.tag:hover{border-color:#00c9a7;color:#00c9a7;background:rgba(0,201,167,.08)}
-.stats{display:flex;align-items:center;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);border-radius:16px;padding:20px 40px}
-.st{text-align:center;padding:0 32px}.sn{display:block;font-size:1.8rem;font-weight:800;color:#00c9a7;letter-spacing:-.03em}.sl{font-size:.7rem;color:#5c6882;text-transform:uppercase;letter-spacing:.1em;margin-top:2px}
-.dv{width:1px;height:40px;background:rgba(255,255,255,.08)}
-.section{padding:60px 0}.container{max-width:1100px;margin:0 auto;padding:0 24px}
-.sec-head{display:flex;align-items:baseline;justify-content:space-between;margin-bottom:26px}
-.sec-title{font-size:1.5rem;font-weight:700;letter-spacing:-.03em}.sec-link{font-size:.875rem;color:#00c9a7;cursor:pointer}
-.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:14px}
-.card{background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);border-radius:14px;padding:18px;transition:.2s;display:flex;flex-direction:column;position:relative;overflow:hidden;cursor:pointer}
-.card::before{content:'';position:absolute;left:0;top:0;bottom:0;width:3px;background:transparent;transition:.2s;border-radius:14px 0 0 14px}
-.card:hover{background:rgba(255,255,255,.065);border-color:rgba(0,201,167,.35);transform:translateY(-3px);box-shadow:0 8px 32px rgba(0,0,0,.3)}
-.card:hover::before{background:#00c9a7}
-.card-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:9px}
-.ot{font-size:.62rem;font-weight:700;text-transform:uppercase;padding:2px 8px;border-radius:4px;letter-spacing:.06em}
-.psu{background:rgba(245,200,66,.12);color:#f5c842}.govt{background:rgba(0,201,167,.1);color:#00c9a7}.nhm{background:rgba(100,180,255,.1);color:#64b4ff}.esic{background:rgba(180,100,255,.1);color:#b464ff}.rlwy{background:rgba(255,150,50,.1);color:#ff9632}.aiims{background:rgba(255,80,80,.1);color:#ff6060}
-.vf{font-size:.68rem;color:#00c9a7;font-weight:600}
-.card-title{font-size:.93rem;font-weight:600;line-height:1.35;margin-bottom:10px;color:#e8edf8}
-.metas{display:flex;flex-wrap:wrap;gap:5px;margin-bottom:13px}
-.meta{font-size:.7rem;padding:3px 9px;border-radius:100px;background:rgba(255,255,255,.06);color:#9aa5c0}
-.meta-type{background:rgba(0,201,167,.1);color:#00c9a7}
-.card-foot{display:flex;justify-content:space-between;align-items:center;margin-top:auto}
-.date{font-size:.73rem;color:#5c6882}.date.urg{color:#ff4d4d;font-weight:600}.date.sn2{color:#f5a623;font-weight:600}
-.arr{color:#5c6882;transition:.2s}.card:hover .arr{color:#00c9a7;transform:translateX(4px)}
-.cats{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:13px}
-.cat{background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);border-radius:14px;padding:22px;cursor:pointer;transition:.2s}.cat:hover{border-color:rgba(0,201,167,.3);transform:translateY(-3px);background:rgba(255,255,255,.06)}
-.cat-icon{font-size:1.6rem;margin-bottom:8px}.cat-name{font-weight:700;margin-bottom:5px;font-size:1rem}.cat-desc{font-size:.82rem;color:#9aa5c0;line-height:1.5}
-.trust{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:28px;background:rgba(0,201,167,.03);padding:40px 0;border-top:1px solid rgba(255,255,255,.05);border-bottom:1px solid rgba(255,255,255,.05)}
-.trust-item{text-align:center;padding:24px}.trust-icon{font-size:1.8rem;margin-bottom:12px}.trust-item h3{font-weight:700;margin-bottom:8px;font-size:1.05rem}.trust-item p{font-size:.85rem;color:#9aa5c0;line-height:1.7}
-.skel{height:158px;border-radius:14px;background:linear-gradient(90deg,rgba(255,255,255,.04) 25%,rgba(255,255,255,.07) 50%,rgba(255,255,255,.04) 75%);background-size:200% 100%;animation:sh 1.4s infinite}@keyframes sh{0%{background-position:200% 0}100%{background-position:-200% 0}}
-.empty{text-align:center;color:#5c6882;padding:40px;grid-column:1/-1}
-footer{border-top:1px solid rgba(255,255,255,.06);padding:32px 24px;text-align:center;color:#5c6882;font-size:.82rem;background:#080d1a}
-@media(max-width:700px){.nav-links{display:none}.stats{flex-direction:column;gap:14px;padding:20px}.dv{width:48px;height:1px}.grid,.cats{grid-template-columns:1fr}.trust{grid-template-columns:1fr}}
-</style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>MedOfficer Jobs — Minimal</title>
+  <meta name="description" content="Minimal and clean listing page for verified government medical officer jobs in India." />
+  <style>
+    :root {
+      --bg: #f7f8fa;
+      --card: #ffffff;
+      --text: #1f2937;
+      --muted: #6b7280;
+      --line: #e5e7eb;
+      --primary: #0f766e;
+      --primary-soft: #ecfeff;
+    }
+
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+    }
+
+    .container { max-width: 900px; margin: 0 auto; padding: 20px; }
+
+    header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 18px;
+    }
+
+    h1 { font-size: 1.35rem; margin: 0; }
+    .meta { color: var(--muted); font-size: 0.9rem; }
+
+    .toolbar {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 10px;
+      margin-bottom: 16px;
+    }
+
+    input, button {
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      padding: 10px 12px;
+      font-size: 0.95rem;
+    }
+
+    input:focus {
+      outline: 2px solid #99f6e4;
+      border-color: var(--primary);
+    }
+
+    button {
+      background: var(--primary);
+      color: white;
+      cursor: pointer;
+      border-color: var(--primary);
+    }
+
+    .stats {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 10px;
+      margin-bottom: 16px;
+    }
+
+    .stat {
+      background: var(--card);
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      padding: 12px;
+    }
+
+    .stat strong { display: block; font-size: 1.1rem; }
+    .stat span { color: var(--muted); font-size: 0.82rem; }
+
+    .list {
+      display: grid;
+      gap: 10px;
+    }
+
+    .job {
+      background: var(--card);
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      padding: 12px;
+    }
+
+    .job h2 {
+      margin: 0 0 6px 0;
+      font-size: 1rem;
+      line-height: 1.35;
+    }
+
+    .tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin-bottom: 8px;
+    }
+
+    .tag {
+      font-size: 0.78rem;
+      padding: 3px 8px;
+      border-radius: 999px;
+      border: 1px solid var(--line);
+      background: #fafafa;
+      color: #374151;
+    }
+
+    .verified {
+      background: var(--primary-soft);
+      border-color: #a7f3d0;
+      color: #065f46;
+    }
+
+    .muted { color: var(--muted); font-size: 0.85rem; }
+    .empty { text-align: center; color: var(--muted); padding: 20px; }
+
+    @media (max-width: 640px) {
+      .stats { grid-template-columns: 1fr; }
+      .toolbar { grid-template-columns: 1fr; }
+    }
+  </style>
 </head>
 <body>
-<nav class="nav">
-  <a href="/" class="logo">&#9877; MedOfficer<em>Jobs</em></a>
-  <div class="nav-links">
-    <a href="/?psu=true">PSU Jobs</a>
-    <a href="/?state=Telangana">Telangana</a>
-    <a href="/?state=Andhra Pradesh">Andhra Pradesh</a>
-    <a href="/?closing_soon=true">Closing Soon</a>
-    <a href="/?verified=true">Verified</a>
-  </div>
-</nav>
+  <main class="container">
+    <header>
+      <div>
+        <h1>MedOfficer Jobs</h1>
+        <div class="meta">Minimal design • verified government medical officer listings</div>
+      </div>
+    </header>
 
-<section class="hero">
-  <div class="badge"><div class="dot"></div><span id="sb">...</span> verified jobs live</div>
-  <h1>Government Medical<br/>Officer Jobs<br/><em>India 2025</em></h1>
-  <p class="sub">GDMO &middot; PSU Doctor &middot; NHM &middot; ESIC &middot; AIIMS &middot; Railways<br/>Official sources only. Verified. Updated daily.</p>
-  <div class="search-wrap">
-    <div class="search-box">
-      <input id="q" type="text" placeholder="Search by title, hospital, state..." onkeydown="if(event.key==='Enter')go()"/>
-      <button onclick="go()">Search</button>
-    </div>
-  </div>
-  <div class="tags">
-    <span class="tag" onclick="f('psu','true')">PSU Jobs</span>
-    <span class="tag" onclick="f('closing_soon','true')">Closing Soon</span>
-    <span class="tag" onclick="f('state','Telangana')">Telangana</span>
-    <span class="tag" onclick="f('state','Andhra Pradesh')">Andhra Pradesh</span>
-    <span class="tag" onclick="f('verified','true')">Verified Only</span>
-    <span class="tag" onclick="f('type','GDMO')">GDMO</span>
-    <span class="tag" onclick="f('org_type','ESIC')">ESIC</span>
-    <span class="tag" onclick="f('org_type','RAILWAY')">Railways</span>
-  </div>
-  <div class="stats">
-    <div class="st"><span class="sn" id="s1">-</span><span class="sl">Active Jobs</span></div>
-    <div class="dv"></div>
-    <div class="st"><span class="sn" id="s2">-</span><span class="sl">Posted This Week</span></div>
-    <div class="dv"></div>
-    <div class="st"><span class="sn" id="s3">-</span><span class="sl">Closing This Week</span></div>
-  </div>
-</section>
+    <section class="toolbar">
+      <input id="query" type="text" placeholder="Search title, state, organization..." onkeydown="if(event.key==='Enter') loadJobs()" />
+      <button onclick="loadJobs()">Search</button>
+    </section>
 
-<div class="section">
-  <div class="container">
-    <div class="sec-head">
-      <h2 class="sec-title">Latest Jobs</h2>
-      <span class="sec-link" onclick="fl={};load()">View all &rarr;</span>
-    </div>
-    <div class="grid" id="grid">
-      <div class="skel"></div><div class="skel"></div><div class="skel"></div>
-    </div>
-  </div>
-</div>
+    <section class="stats">
+      <article class="stat"><strong id="active">-</strong><span>Active jobs</span></article>
+      <article class="stat"><strong id="posted">-</strong><span>Posted this week</span></article>
+      <article class="stat"><strong id="closing">-</strong><span>Closing this week</span></article>
+    </section>
 
-<div class="section" style="padding-top:0">
-  <div class="container">
-    <h2 class="sec-title" style="margin-bottom:20px">Browse by Category</h2>
-    <div class="cats">
-      <div class="cat" onclick="f('psu','true')"><div class="cat-icon">&#127981;</div><div class="cat-name">PSU Jobs</div><div class="cat-desc">NTPC, ONGC, SAIL, BEL, BHEL, IOCL &amp; more</div></div>
-      <div class="cat" onclick="f('type','GDMO')"><div class="cat-icon">&#129514;</div><div class="cat-name">GDMO</div><div class="cat-desc">General Duty Medical Officer positions</div></div>
-      <div class="cat" onclick="f('state','Telangana')"><div class="cat-icon">&#128205;</div><div class="cat-name">Telangana</div><div class="cat-desc">NHM, HMFW, DME, district hospitals</div></div>
-      <div class="cat" onclick="f('state','Andhra Pradesh')"><div class="cat-icon">&#128205;</div><div class="cat-name">Andhra Pradesh</div><div class="cat-desc">DHS AP, NHM, govt medical colleges</div></div>
-      <div class="cat" onclick="f('org_type','ESIC')"><div class="cat-icon">&#127973;</div><div class="cat-name">ESIC</div><div class="cat-desc">ESIC hospitals across India</div></div>
-      <div class="cat" onclick="f('org_type','RAILWAY')"><div class="cat-icon">&#128642;</div><div class="cat-name">Railways</div><div class="cat-desc">Indian Railways medical vacancies</div></div>
-    </div>
-  </div>
-</div>
+    <section id="jobs" class="list">
+      <div class="empty">Loading jobs…</div>
+    </section>
+  </main>
 
-<div class="trust">
-  <div class="container" style="display:contents">
-    <div class="trust-item"><div class="trust-icon">&#10003;</div><h3>Official Sources Only</h3><p>Every job sourced directly from PSU websites, govt portals, NHM and ESIC official pages.</p></div>
-    <div class="trust-item"><div class="trust-icon">&#9200;</div><h3>Daily Updates</h3><p>Automated scrapers check official sources every 24 hours. New listings appear within hours.</p></div>
-    <div class="trust-item"><div class="trust-icon">&#127919;</div><h3>MBBS Doctors Only</h3><p>Only Medical Officer, GDMO, Factory MO, Occupational Health and PSU Doctor roles.</p></div>
-  </div>
-</div>
+  <script>
+    const API = 'https://medofficer-jobs-india-production.up.railway.app';
 
-<footer>
-  <p>&copy; 2025 MedOfficer Jobs &middot; Verified government medical officer jobs for MBBS doctors across India</p>
-  <p style="margin-top:6px">Official sources only &middot; Not an official government website</p>
-</footer>
+    const esc = (v) => String(v ?? '')
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;');
 
-<script>
-var API='https://medofficer-jobs-india-production.up.railway.app';
-var fl={};
-function esc(s){return s?String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'):''}
-function fmtDate(d){if(!d)return'TBD';try{return new Date(d).toLocaleDateString('en-IN',{day:'numeric',month:'short',year:'numeric'});}catch(e){return d}}
-function daysLeft(d){if(!d)return null;return Math.ceil((new Date(d)-new Date())/864e5)}
-function orgClass(t){var m={PSU:'psu',GOVT:'govt',NHM:'nhm',ESIC:'esic',RAILWAY:'rlwy',AIIMS:'aiims'};return m[t]||'govt'}
-function card(j){
-  var dl=daysLeft(j.last_date),uc=dl!==null&&dl<=5?'urg':dl!==null&&dl<=10?'sn2':'';
-  var orgN=esc(j.org_short||j.org_name||'Govt');
-  return '<div class="card"><div class="card-top"><div style="display:flex;align-items:center;gap:7px"><span class="ot '+orgClass(j.org_type)+'">'+esc(j.org_type||'GOVT')+'</span><span style="font-size:.78rem;color:#9aa5c0">'+orgN+'</span></div>'+(j.is_verified?'<span class="vf">&#10003; Verified</span>':'')+'</div><div class="card-title">'+esc(j.title)+'</div><div class="metas"><span class="meta meta-type">'+esc(j.job_type)+'</span><span class="meta">'+esc(j.location_state)+'</span>'+(j.vacancies?'<span class="meta">'+j.vacancies+' posts</span>':'')+'</div><div class="card-foot"><span class="date '+uc+'">'+(j.last_date?'Last date: '+fmtDate(j.last_date):'Date TBD')+'</span><span class="arr">&rarr;</span></div></div>'
-}
-function go(){var q=document.getElementById('q').value.trim();if(q){fl={search:q};load();}}
-function f(k,v){fl={};fl[k]=v;load();}
-async function load(){
-  var g=document.getElementById('grid');
-  g.innerHTML='<div class="skel"></div><div class="skel"></div><div class="skel"></div>';
-  try{
-    var u=new URL(API+'/api/jobs');
-    u.searchParams.set('limit','12');
-    for(var k in fl){if(fl[k])u.searchParams.set(k,fl[k]);}
-    var r=await fetch(u.toString());
-    if(!r.ok)throw new Error();
-    var d=await r.json();
-    g.innerHTML=d.jobs&&d.jobs.length?d.jobs.map(card).join(''):'<p class="empty">No jobs found. <span style="color:#00c9a7;cursor:pointer" onclick="fl={};load()">Clear filters</span></p>';
-  }catch(err){
-    g.innerHTML='<p class="empty">Could not load jobs. <span style="color:#00c9a7;cursor:pointer" onclick="load()">Retry</span></p>';
-  }
-}
-async function loadStats(){
-  try{
-    var r=await fetch(API+'/api/jobs/stats');
-    if(!r.ok)throw new Error();
-    var s=await r.json();
-    document.getElementById('s1').textContent=(s.total_active||0).toLocaleString('en-IN');
-    document.getElementById('s2').textContent=s.posted_this_week||0;
-    document.getElementById('s3').textContent=s.closing_this_week||0;
-    document.getElementById('sb').textContent=(s.total_verified||s.total_active||0).toLocaleString('en-IN');
-  }catch(e){
-    document.getElementById('s1').textContent='500+';
-    document.getElementById('s2').textContent='40+';
-    document.getElementById('s3').textContent='15+';
-    document.getElementById('sb').textContent='500+';
-  }
-}
-loadStats();load();
-</script>
+    function formatDate(dateValue) {
+      if (!dateValue) return 'Date TBD';
+      const d = new Date(dateValue);
+      if (Number.isNaN(d.getTime())) return esc(dateValue);
+      return d.toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' });
+    }
+
+    function card(job) {
+      return `
+        <article class="job">
+          <h2>${esc(job.title)}</h2>
+          <div class="tags">
+            <span class="tag">${esc(job.org_type || 'GOVT')}</span>
+            <span class="tag">${esc(job.job_type || 'MO')}</span>
+            <span class="tag">${esc(job.location_state || 'India')}</span>
+            ${job.is_verified ? '<span class="tag verified">Verified</span>' : ''}
+          </div>
+          <div class="muted">${esc(job.org_name || 'Government Organization')}</div>
+          <div class="muted">Last date: ${formatDate(job.last_date)}</div>
+        </article>
+      `;
+    }
+
+    async function loadStats() {
+      try {
+        const res = await fetch(`${API}/api/jobs/stats`);
+        if (!res.ok) throw new Error('stats fetch failed');
+        const stats = await res.json();
+        document.getElementById('active').textContent = (stats.total_active || 0).toLocaleString('en-IN');
+        document.getElementById('posted').textContent = String(stats.posted_this_week || 0);
+        document.getElementById('closing').textContent = String(stats.closing_this_week || 0);
+      } catch {
+        document.getElementById('active').textContent = '500+';
+        document.getElementById('posted').textContent = '40+';
+        document.getElementById('closing').textContent = '15+';
+      }
+    }
+
+    async function loadJobs() {
+      const list = document.getElementById('jobs');
+      const q = document.getElementById('query').value.trim();
+      list.innerHTML = '<div class="empty">Loading jobs…</div>';
+
+      try {
+        const url = new URL(`${API}/api/jobs`);
+        url.searchParams.set('limit', '15');
+        if (q) url.searchParams.set('search', q);
+
+        const res = await fetch(url.toString());
+        if (!res.ok) throw new Error('jobs fetch failed');
+        const data = await res.json();
+
+        if (!data.jobs || data.jobs.length === 0) {
+          list.innerHTML = '<div class="empty">No jobs found.</div>';
+          return;
+        }
+
+        list.innerHTML = data.jobs.map(card).join('');
+      } catch {
+        list.innerHTML = '<div class="empty">Unable to load jobs right now.</div>';
+      }
+    }
+
+    loadStats();
+    loadJobs();
+  </script>
 </body>
-  </html>
+</html>
