@@ -1,385 +1,237 @@
-# MedOfficer Jobs v2 — AWS Deployment Guide
+# MedOfficer Jobs — Canonical Deployment Runbook (Render)
 
-## Architecture at a Glance
+This is the **single source of truth** for production deployment.
+
+It standardizes on:
+- **Render Web Service** for API (`server.js`)
+- **Render Static Site** for frontend (`index.html`, `main.css`)
+- **Render Managed PostgreSQL** for the database
+- **Render Cron Job** for 15-minute refresh (`node scripts/refresh-jobs.mjs`)
+
+---
+
+## 1) Architecture
 
 ```
-Users → CloudFront → S3 (frontend HTML/CSS/JS)
-             ↕
-Users → CloudFront → App Runner (API)
-                          ↕
-                     RDS PostgreSQL
-                          ↕
-                     S3 (logs/exports)
+Users -> Render Static Site (frontend)
+                |
+                v
+         Render Web Service (Node/Express API)
+                |
+                v
+      Render Managed PostgreSQL (primary DB)
+
+Render Cron Job (every 15 min) -> scripts/refresh-jobs.mjs
 ```
 
 ---
 
-## Prerequisites
+## 2) Provisioning steps (exact)
 
-- AWS account with billing enabled
-- AWS CLI installed and configured (`aws configure`)
-- Node.js 18+ on your local machine
-- `psql` command available (PostgreSQL client)
+## 2.1 Create PostgreSQL (Managed)
+
+1. In Render dashboard: **New +** -> **PostgreSQL**.
+2. Set:
+   - Name: `medofficer-db-prod`
+   - Region: same as app services
+   - Plan: choose based on traffic/SLA
+3. Click **Create Database**.
+4. After ready, copy:
+   - Internal Database URL (preferred for Render-internal access)
+   - Host, Port, Database, User, Password
+
+## 2.2 Run migrations/schema
+
+From your local machine (or any box with `psql`), run:
+
+```bash
+psql "$DATABASE_URL" -f schema.sql
+```
+
+If you do not have a URL string, run with discrete values:
+
+```bash
+PGPASSWORD="$DB_PASSWORD" psql \
+  -h "$DB_HOST" \
+  -p "${DB_PORT:-5432}" \
+  -U "$DB_USER" \
+  -d "$DB_NAME" \
+  -f schema.sql
+```
+
+Expected result: table/extension creation and seed inserts complete without fatal errors.
+
+## 2.3 Create API Web Service
+
+1. Render dashboard: **New +** -> **Web Service**.
+2. Connect repo: `medofficer-jobs-india`.
+3. Configure:
+   - Name: `medofficer-api-prod`
+   - Runtime: `Node`
+   - Root Directory: repository root
+   - Build Command: `npm ci`
+   - Start Command: `npm start`
+4. Set environment variables (see section 3).
+5. Create service.
+
+## 2.4 Create Frontend Static Site
+
+1. Render dashboard: **New +** -> **Static Site**.
+2. Connect same repo.
+3. Configure:
+   - Name: `medofficer-web-prod`
+   - Root Directory: repository root
+   - Build Command: *(leave empty)*
+   - Publish Directory: `.`
+4. Set Rewrite/Redirect rule:
+   - Source: `/*`
+   - Destination: `/index.html`
+   - Action: `Rewrite`
+5. Deploy.
+
+> Frontend currently points to a Railway URL in `index.html`; update `API` constant to your Render API URL as part of go-live prep.
+
+## 2.5 Create dedicated Cron Service (15-minute refresh)
+
+1. Render dashboard: **New +** -> **Cron Job**.
+2. Connect same repo.
+3. Configure:
+   - Name: `medofficer-refresh-15m`
+   - Runtime: `Node`
+   - Root Directory: repository root
+   - Build Command: `npm ci`
+   - Start Command: `node scripts/refresh-jobs.mjs`
+   - Cron Expression: `*/15 * * * *`
+   - Timezone: `UTC`
+4. Add required env vars/secrets needed by refresh logic.
+5. Create cron job.
 
 ---
 
-## Step 1 — Create RDS PostgreSQL
+## 3) Required env vars and secrets
 
-### 1.1 Launch RDS
+Configure these in Render **Environment** for web service and cron job (as applicable):
 
-In AWS Console → RDS → Create database:
+| Variable | Required | Example | Secret? | Notes |
+|---|---|---|---|---|
+| `NODE_ENV` | Yes | `production` | No | Runtime mode |
+| `PORT` | No | `8080` | No | Render injects this automatically; app already respects `PORT` |
+| `DB_HOST` | Yes | `dpg-xxx-a.oregon-postgres.render.com` | Yes | From Render Postgres |
+| `DB_PORT` | Yes | `5432` | No | |
+| `DB_NAME` | Yes | `medofficer` | No | |
+| `DB_USER` | Yes | `medofficer_user` | Yes | |
+| `DB_PASSWORD` | Yes | `<strong-random>` | Yes | |
+| `DATABASE_URL` | Recommended | `postgres://...` | Yes | Useful for tooling/migrations |
+| `CORS_ORIGIN` | Recommended | `https://medofficer-web-prod.onrender.com` | No | If you tighten CORS policy later |
 
-| Setting | Value |
-|---|---|
-| Engine | PostgreSQL 15 |
-| Template | Free tier (dev) or Production |
-| DB Identifier | `medofficer-db` |
-| Master username | `medofficer_admin` |
-| Master password | Generate strong password, save it |
-| Instance class | `db.t3.micro` (dev) / `db.t3.small` (prod) |
-| Storage | 20 GB gp3 |
-| VPC | Default or create new |
-| Public access | **No** (App Runner uses VPC connector) |
-| Backup retention | 7 days |
-
-### 1.2 Create the database user
-
-Connect via psql (from a bastion or Cloud9):
-
-```bash
-psql -h <rds-endpoint> -U medofficer_admin -d postgres
-```
-
-```sql
-CREATE DATABASE medofficer;
-CREATE USER medofficer_api WITH PASSWORD 'strong_api_password';
-GRANT ALL PRIVILEGES ON DATABASE medofficer TO medofficer_api;
-```
-
-### 1.3 Run schema
-
-```bash
-psql -h <rds-endpoint> -U medofficer_api -d medofficer \
-  -f backend/src/config/schema.sql
-```
+Secret management rules:
+- Set secrets only in Render dashboard env var UI.
+- Never commit secrets to repo or `.env` tracked files.
+- Rotate DB password immediately if exposed.
 
 ---
 
-## Step 2 — Store Secrets in AWS Secrets Manager
+## 4) Service commands (canonical)
 
-Never put credentials directly in App Runner env vars.
-
-```bash
-# Create secret
-aws secretsmanager create-secret \
-  --name medofficer/production \
-  --region ap-south-1 \
-  --secret-string '{
-    "DB_HOST": "your-rds.rds.amazonaws.com",
-    "DB_PORT": "5432",
-    "DB_NAME": "medofficer",
-    "DB_USER": "medofficer_api",
-    "DB_PASSWORD": "your_db_password",
-    "JWT_SECRET": "generate_64_char_random_string_here",
-    "DB_SSL": "true"
-  }'
-```
-
-Generate a JWT secret:
-```bash
-node -e "console.log(require('crypto').randomBytes(64).toString('hex'))"
-```
+- API start command: `npm start`
+- API process entry: `node server.js` (via `package.json` script)
+- Cron command: `node scripts/refresh-jobs.mjs`
+- Migration command: `psql "$DATABASE_URL" -f schema.sql`
 
 ---
 
-## Step 3 — Deploy Backend to App Runner
+## 5) Health checks and logs
 
-### 3.1 Create IAM Role for App Runner Instance
+## 5.1 Health checks
 
-1. Go to IAM → Roles → Create Role
-2. Trusted entity: **App Runner**
-3. Attach policy from `infrastructure/iam/apprunner-instance-role.json`
-4. Name: `MedOfficerAppRunnerRole`
-
-### 3.2 Create App Runner Service
-
-AWS Console → App Runner → Create service:
-
-**Source:**
-- Source type: Source code repository (GitHub)
-- Connect your GitHub account
-- Repository: your repo
-- Branch: `main`
-- Root directory: `backend`
-
-**Build settings:**
-- Runtime: Node.js 18
-- Build command: `npm ci --only=production`
-- Start command: `node server.js`
-- Port: `8080`
-
-**Service settings:**
-- CPU: 1 vCPU
-- Memory: 2 GB
-- Instance role: `MedOfficerAppRunnerRole`
-
-**Environment variables** (add each from your secret):
-```
-NODE_ENV = production
-DB_HOST  = (from Secrets Manager)
-DB_PORT  = 5432
-DB_NAME  = medofficer
-DB_USER  = medofficer_api
-DB_PASSWORD = (from Secrets Manager)
-DB_SSL   = true
-JWT_SECRET = (from Secrets Manager)
-ALLOWED_ORIGINS = https://yourdomain.com
-AWS_REGION = ap-south-1
-S3_LOGS_BUCKET = medofficer-scraper-logs
-```
-
-> Tip: App Runner supports direct Secrets Manager injection — link the secret ARN per variable for better security.
-
-### 3.3 Verify deployment
+Primary endpoint:
 
 ```bash
-curl https://your-apprunner-url.ap-south-1.awsapprunner.com/health
-# Expected: {"status":"ok","database":"connected"}
+curl -fsS https://<api-service>.onrender.com/health
 ```
 
-Note your App Runner URL — you'll use it in the frontend config.
+Expected healthy JSON:
 
----
+```json
+{"status":"ok","database":"connected"}
+```
 
-## Step 4 — Create S3 Bucket for Frontend
+If `database` is `disconnected`, treat as degraded and investigate DB/env connectivity.
 
-### 4.1 Create bucket
+## 5.2 Log inspection procedures
+
+Render dashboard -> each service -> **Logs**.
+
+Check these in order:
+1. **Web Service logs**
+   - Startup line: `Running on port ...`
+   - DB or crash errors
+2. **Cron Job logs**
+   - Success line from script: `Updated jobs.json at ...`
+   - Failure line: `Refresh failed: ...`
+3. **Postgres metrics/logs**
+   - Connection saturation
+   - CPU/storage spikes
+
+CLI/quick checks:
 
 ```bash
-aws s3 mb s3://medofficer-frontend --region ap-south-1
-```
-
-### 4.2 Disable public access block (CloudFront will serve it)
-
-```bash
-aws s3api put-public-access-block \
-  --bucket medofficer-frontend \
-  --public-access-block-configuration "BlockPublicAcls=true,IgnorePublicAcls=true,BlockPublicPolicy=true,RestrictPublicBuckets=true"
-```
-
-### 4.3 Set up frontend config
-
-Edit `frontend/assets/js/config.js`:
-
-```js
-window.MEDOFFICER_CONFIG = {
-  API_BASE: 'https://your-apprunner-url.ap-south-1.awsapprunner.com',
-  SITE_NAME: 'MedOfficer Jobs',
-};
-```
-
-Or if you have a custom domain:
-```js
-  API_BASE: 'https://api.yourdomain.com',
-```
-
-### 4.4 Upload frontend to S3
-
-```bash
-aws s3 sync frontend/ s3://medofficer-frontend/ \
-  --delete \
-  --cache-control "public, max-age=300" \
-  --exclude "*.html" \
-  --include "*.css" --cache-control "public, max-age=86400" \
-  --include "*.js"  --cache-control "public, max-age=86400"
-
-# Upload HTML with short cache
-aws s3 sync frontend/ s3://medofficer-frontend/ \
-  --delete \
-  --include "*.html" \
-  --cache-control "public, max-age=300, must-revalidate"
-```
-
-Or use the deploy script:
-```bash
-bash scripts/deploy-frontend.sh
+curl -i https://<api-service>.onrender.com/health
+curl -i "https://<api-service>.onrender.com/api/jobs?limit=5"
 ```
 
 ---
 
-## Step 5 — Set Up CloudFront
+## 6) Rollback and incident response
 
-### 5.1 Create distribution
+## 6.1 Fast rollback
 
-AWS Console → CloudFront → Create distribution:
+1. Render dashboard -> service -> **Deploys**.
+2. Select last known-good deploy.
+3. Click **Rollback**.
+4. Re-run verification checklist (section 7).
 
-| Setting | Value |
-|---|---|
-| Origin domain | `medofficer-frontend.s3.ap-south-1.amazonaws.com` |
-| Origin access | Origin access control (OAC) — create new |
-| Viewer protocol | Redirect HTTP to HTTPS |
-| Allowed HTTP methods | GET, HEAD |
-| Cache policy | CachingOptimized |
-| Price class | Use only North America and Europe (or All) |
-| Default root object | `index.html` |
+## 6.2 Incident steps
 
-**Error pages:**
-- 403 → `/index.html`, response 200
-- 404 → `/index.html`, response 200
-
-### 5.2 Grant CloudFront access to S3
-
-After creating the distribution, AWS will show you a bucket policy to add:
-
-```bash
-# AWS Console will show you the exact policy — copy and apply it:
-aws s3api put-bucket-policy \
-  --bucket medofficer-frontend \
-  --policy file://infrastructure/cloudfront/bucket-policy.json
-```
-
-### 5.3 Note your CloudFront URL
-
-`https://xxxxxxxxx.cloudfront.net` — this is your live site.
+1. **Acknowledge incident** and freeze non-essential deploys.
+2. Check `/health` and recent deploy timestamp.
+3. Inspect web + cron logs for first failure signature.
+4. Validate DB connectivity/credentials.
+5. If recent deploy caused breakage: rollback immediately.
+6. If data issue:
+   - pause cron job temporarily,
+   - correct data/migration issue,
+   - run one manual cron execution,
+   - resume schedule.
+7. Document root cause + preventive action in incident note.
 
 ---
 
-## Step 6 — S3 Bucket for Scraper Logs
+## 7) Post-deploy verification checklist
 
-```bash
-aws s3 mb s3://medofficer-scraper-logs --region ap-south-1
+Run in this order after every production deploy:
 
-# Lifecycle: auto-delete logs older than 90 days
-aws s3api put-bucket-lifecycle-configuration \
-  --bucket medofficer-scraper-logs \
-  --lifecycle-configuration '{
-    "Rules": [{
-      "ID": "DeleteOldLogs",
-      "Status": "Enabled",
-      "Prefix": "logs/",
-      "Expiration": { "Days": 90 }
-    }]
-  }'
-```
+1. API health
+   ```bash
+   curl -fsS https://<api-service>.onrender.com/health
+   ```
+2. API jobs endpoint
+   ```bash
+   curl -fsS "https://<api-service>.onrender.com/api/jobs?limit=3"
+   ```
+3. Frontend loads and renders job list in browser.
+4. Browser network tab shows API calls to Render API domain (not old Railway URL).
+5. Cron job last run status is **Succeeded**.
+6. Cron log contains `Updated jobs.json at` timestamp from current day.
+7. DB connection count stable; no auth failures.
+8. No repeating error bursts in web logs for 15 minutes.
 
----
-
-## Step 7 — EventBridge Scheduler (Scraper Automation)
-
-Since the scraper runs inside App Runner, use EventBridge to POST to the scraper endpoint:
-
-### Option A: HTTP Target (simplest)
-
-```bash
-# Create scheduler that calls the scraper endpoint daily at 2 AM IST
-aws scheduler create-schedule \
-  --name medofficer-daily-scrape \
-  --schedule-expression "cron(30 20 * * ? *)" \
-  --flexible-time-window '{"Mode":"FLEXIBLE","MaximumWindowInMinutes":30}' \
-  --target '{
-    "Arn": "arn:aws:scheduler:::http",
-    "RoleArn": "arn:aws:iam::ACCOUNT_ID:role/SchedulerHTTPRole",
-    "Input": "{\"method\":\"POST\",\"endpoint\":\"https://your-apprunner.awsapprunner.com/api/scraper/run\",\"headers\":{\"Authorization\":\"Bearer YOUR_ADMIN_JWT\"}}",
-    "RetryPolicy": {"MaximumRetryAttempts": 2}
-  }'
-```
-
-> Or call it manually from the admin dashboard when needed.
+Mark deploy complete only if all checks pass.
 
 ---
 
-## Step 8 — Custom Domain (Optional)
+## 8) Operational notes
 
-### 8.1 Add domain to CloudFront
-
-1. CloudFront → Your distribution → Edit → Alternate domain names
-2. Add: `yourdomain.com`, `www.yourdomain.com`
-3. Request SSL certificate via AWS Certificate Manager (ACM) in **us-east-1**
-
-### 8.2 API domain
-
-1. App Runner → Custom domains → Add domain: `api.yourdomain.com`
-2. Follow the CNAME DNS instructions
-
-### 8.3 Update CORS
-
-In App Runner env vars, update:
-```
-ALLOWED_ORIGINS = https://yourdomain.com,https://www.yourdomain.com
-```
-
----
-
-## Environment Variables Reference
-
-### Backend (App Runner)
-
-| Variable | Description | Example |
-|---|---|---|
-| `PORT` | Server port (App Runner sets this) | `8080` |
-| `NODE_ENV` | Environment | `production` |
-| `DB_HOST` | RDS endpoint | `medofficer.xxx.rds.amazonaws.com` |
-| `DB_PORT` | PostgreSQL port | `5432` |
-| `DB_NAME` | Database name | `medofficer` |
-| `DB_USER` | DB user | `medofficer_api` |
-| `DB_PASSWORD` | DB password | (from Secrets Manager) |
-| `DB_SSL` | Enable SSL | `true` |
-| `JWT_SECRET` | JWT signing key (64+ chars) | (from Secrets Manager) |
-| `ALLOWED_ORIGINS` | CORS whitelist | `https://yourdomain.com` |
-| `AWS_REGION` | AWS region | `ap-south-1` |
-| `S3_LOGS_BUCKET` | Scraper log bucket | `medofficer-scraper-logs` |
-
-### Frontend (config.js)
-
-| Variable | Description |
-|---|---|
-| `API_BASE` | Backend URL from App Runner or custom domain |
-
----
-
-## Monthly Cost Estimate (light production)
-
-| Service | Config | Est. Cost/month |
-|---|---|---|
-| App Runner | 1 vCPU, 2GB, low traffic | ~$20–40 |
-| RDS PostgreSQL | db.t3.micro, 20GB | ~$15–20 |
-| S3 (frontend + logs) | <1 GB | ~$1 |
-| CloudFront | <10 GB transfer | ~$2–5 |
-| Secrets Manager | 2 secrets | ~$1 |
-| **Total** | | **~$40–70/month** |
-
----
-
-## Admin User Setup
-
-After deploying and running the schema, create your first admin:
-
-```bash
-node backend/scripts/create-admin.js \
-  --email admin@yourdomain.com \
-  --password StrongPassword123
-```
-
-Or via psql:
-```sql
-INSERT INTO admin_users (email, password_hash, role)
-VALUES (
-  'admin@yourdomain.com',
-  -- generate with: node -e "const b=require('bcryptjs');b.hash('password',12).then(console.log)"
-  '$2a$12$...',
-  'super'
-);
-```
-
----
-
-## Ongoing Maintenance
-
-| Task | Frequency | How |
-|---|---|---|
-| Deploy backend changes | On push | App Runner auto-deploys from GitHub |
-| Deploy frontend changes | On push | `bash scripts/deploy-frontend.sh` |
-| CloudFront cache invalidation | After frontend deploy | `aws cloudfront create-invalidation --distribution-id XXXX --paths "/*"` |
-| RDS snapshots | Automatic | Configured in RDS (7-day retention) |
-| Review scrape logs | Weekly | Admin dashboard or S3 |
-| Expire old jobs | Weekly | `UPDATE jobs SET is_active=FALSE WHERE last_date < CURRENT_DATE - 7` |
+- Keep all services in the same Render region to reduce latency.
+- Do schema updates in backward-compatible phases when possible.
+- Prefer additive migrations first; destructive operations in controlled windows.
