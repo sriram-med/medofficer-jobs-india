@@ -3,403 +3,458 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>MedOfficer Jobs — Government Medical Jobs in India</title>
-  <meta name="description" content="Latest verified government medical officer jobs in India. Auto-updated every 6 hours." />
-  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
+  <title>MedOfficer Jobs</title>
+  <meta name="description" content="Latest government medical officer jobs in India." />
+  <link href="https://fonts.googleapis.com/css2?family=SF+Pro+Display:wght@300;400;500;600;700&display=swap" rel="stylesheet">
   <style>
     :root {
-      --bg: #f0f4f8;
-      --surface: #ffffff;
-      --surface2: #f8fafc;
-      --text: #0f172a;
-      --text2: #475569;
-      --muted: #94a3b8;
-      --line: #e2e8f0;
-      --primary: #0284c7;
-      --primary-dark: #0369a1;
-      --primary-glow: rgba(2, 132, 199, 0.15);
-      --accent: #06b6d4;
-      --new: #f59e0b;
-      --success: #10b981;
-      --danger: #ef4444;
-      --radius: 14px;
-      --shadow: 0 1px 3px rgba(0,0,0,0.06), 0 4px 16px rgba(0,0,0,0.04);
-      --shadow-hover: 0 4px 12px rgba(0,0,0,0.1), 0 12px 32px rgba(0,0,0,0.06);
+      --blur: 24px;
+      --glass: rgba(255,255,255,0.18);
+      --glass-border: rgba(255,255,255,0.35);
+      --glass-hover: rgba(255,255,255,0.28);
+      --text: #1a1a2e;
+      --text2: #4a4a6a;
+      --muted: rgba(100,100,130,0.7);
+      --accent: #007aff;
+      --accent2: #34aadc;
+      --new: #ff9f0a;
+      --success: #30d158;
+      --radius: 20px;
+      --radius-sm: 14px;
     }
 
-    * { box-sizing: border-box; margin: 0; padding: 0; }
+    * { box-sizing: border-box; margin: 0; padding: 0; -webkit-font-smoothing: antialiased; }
 
     body {
-      font-family: 'DM Sans', sans-serif;
-      background: var(--bg);
-      color: var(--text);
+      font-family: -apple-system, 'SF Pro Display', BlinkMacSystemFont, 'Segoe UI', sans-serif;
       min-height: 100vh;
+      background: #e8f0ff;
+      overflow-x: hidden;
+    }
+
+    /* ── ANIMATED BACKGROUND ── */
+    .bg {
+      position: fixed;
+      inset: 0;
+      z-index: 0;
+      overflow: hidden;
+    }
+
+    .bg-blob {
+      position: absolute;
+      border-radius: 50%;
+      filter: blur(80px);
+      opacity: 0.6;
+      animation: float linear infinite;
+    }
+
+    .blob1 {
+      width: 500px; height: 500px;
+      background: radial-gradient(circle, #a8d8ff, #6ab4ff);
+      top: -100px; left: -100px;
+      animation-duration: 20s;
+    }
+
+    .blob2 {
+      width: 400px; height: 400px;
+      background: radial-gradient(circle, #b8e6ff, #89d4ff);
+      top: 30%; right: -80px;
+      animation-duration: 25s;
+      animation-delay: -8s;
+    }
+
+    .blob3 {
+      width: 350px; height: 350px;
+      background: radial-gradient(circle, #c5f0ff, #a0deff);
+      bottom: 10%; left: 20%;
+      animation-duration: 18s;
+      animation-delay: -4s;
+    }
+
+    .blob4 {
+      width: 300px; height: 300px;
+      background: radial-gradient(circle, #ddf4ff, #b5e8ff);
+      bottom: 30%; right: 10%;
+      animation-duration: 22s;
+      animation-delay: -12s;
+    }
+
+    @keyframes float {
+      0%, 100% { transform: translate(0, 0) scale(1); }
+      25% { transform: translate(30px, -20px) scale(1.05); }
+      50% { transform: translate(-20px, 30px) scale(0.95); }
+      75% { transform: translate(20px, 20px) scale(1.02); }
+    }
+
+    /* ── GLASS MIXIN ── */
+    .glass {
+      background: var(--glass);
+      backdrop-filter: blur(var(--blur)) saturate(180%);
+      -webkit-backdrop-filter: blur(var(--blur)) saturate(180%);
+      border: 1px solid var(--glass-border);
+    }
+
+    /* ── LAYOUT ── */
+    .page {
+      position: relative;
+      z-index: 1;
+      max-width: 680px;
+      margin: 0 auto;
+      padding: 0 16px 40px;
     }
 
     /* ── HEADER ── */
     .header {
-      background: linear-gradient(135deg, #0c4a6e 0%, #0284c7 60%, #06b6d4 100%);
-      padding: 28px 20px 32px;
-      position: relative;
-      overflow: hidden;
+      padding: 52px 0 24px;
+      text-align: center;
+      animation: fadeDown 0.7s cubic-bezier(0.34, 1.4, 0.64, 1) both;
     }
 
-    .header::before {
-      content: '';
-      position: absolute;
-      top: -60px; right: -60px;
-      width: 220px; height: 220px;
-      border-radius: 50%;
-      background: rgba(255,255,255,0.06);
+    @keyframes fadeDown {
+      from { opacity: 0; transform: translateY(-24px); }
+      to { opacity: 1; transform: translateY(0); }
     }
 
-    .header::after {
-      content: '';
-      position: absolute;
-      bottom: -40px; left: 30%;
-      width: 160px; height: 160px;
-      border-radius: 50%;
-      background: rgba(255,255,255,0.04);
-    }
-
-    .header-inner {
-      max-width: 900px;
-      margin: 0 auto;
-      position: relative;
-      z-index: 1;
-    }
-
-    .header-top {
-      display: flex;
-      justify-content: space-between;
-      align-items: flex-start;
-      margin-bottom: 6px;
-    }
-
-    .logo {
-      display: flex;
+    .logo-wrap {
+      display: inline-flex;
       align-items: center;
-      gap: 10px;
+      gap: 12px;
+      margin-bottom: 8px;
     }
 
     .logo-icon {
-      width: 40px; height: 40px;
-      background: rgba(255,255,255,0.2);
-      border-radius: 10px;
+      width: 52px; height: 52px;
+      border-radius: 14px;
+      background: linear-gradient(135deg, rgba(255,255,255,0.9), rgba(255,255,255,0.5));
+      border: 1px solid rgba(255,255,255,0.8);
+      box-shadow: 0 8px 32px rgba(0,122,255,0.15), inset 0 1px 0 rgba(255,255,255,0.8);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 26px;
+    }
+
+    .logo-title {
+      font-size: 1.8rem;
+      font-weight: 700;
+      background: linear-gradient(135deg, #007aff, #34aadc);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      letter-spacing: -0.5px;
+    }
+
+    .header-sub {
+      font-size: 0.88rem;
+      color: var(--text2);
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 20px;
-      backdrop-filter: blur(10px);
+      gap: 8px;
     }
 
-    .logo-text {
-      font-family: 'Playfair Display', serif;
-      font-size: 1.5rem;
-      color: white;
-      font-weight: 700;
-    }
-
-    .live-badge {
-      display: flex;
+    .live-pill {
+      display: inline-flex;
       align-items: center;
-      gap: 6px;
-      background: rgba(255,255,255,0.15);
-      color: white;
+      gap: 5px;
+      background: rgba(48, 209, 88, 0.15);
+      border: 1px solid rgba(48, 209, 88, 0.3);
+      color: #1a7a3a;
       font-size: 0.75rem;
-      padding: 5px 10px;
+      font-weight: 600;
+      padding: 3px 10px;
       border-radius: 999px;
-      backdrop-filter: blur(10px);
-      font-weight: 500;
     }
 
     .live-dot {
-      width: 7px; height: 7px;
-      background: #4ade80;
+      width: 6px; height: 6px;
+      background: var(--success);
       border-radius: 50%;
       animation: pulse 2s infinite;
     }
 
     @keyframes pulse {
       0%, 100% { opacity: 1; transform: scale(1); }
-      50% { opacity: 0.5; transform: scale(1.3); }
-    }
-
-    .header-sub {
-      color: rgba(255,255,255,0.75);
-      font-size: 0.88rem;
-      margin-left: 50px;
+      50% { opacity: 0.4; transform: scale(1.4); }
     }
 
     /* ── NEW JOBS ALERT ── */
-    .new-alert {
-      max-width: 900px;
-      margin: 16px auto 0;
-      padding: 0 20px;
+    .alert-bar {
+      margin-bottom: 16px;
       display: none;
+      animation: slideIn 0.5s cubic-bezier(0.34, 1.4, 0.64, 1) both;
     }
 
-    .new-alert.show { display: block; }
+    .alert-bar.show { display: block; }
 
-    .new-alert-inner {
-      background: linear-gradient(135deg, #fef3c7, #fde68a);
-      border: 1px solid #fcd34d;
-      border-radius: 10px;
+    @keyframes slideIn {
+      from { opacity: 0; transform: translateY(-10px) scale(0.97); }
+      to { opacity: 1; transform: translateY(0) scale(1); }
+    }
+
+    .alert-inner {
+      background: rgba(255, 159, 10, 0.15);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border: 1px solid rgba(255, 159, 10, 0.35);
+      border-radius: var(--radius-sm);
       padding: 12px 16px;
       display: flex;
       align-items: center;
       justify-content: space-between;
       gap: 12px;
-      animation: slideDown 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
     }
 
-    @keyframes slideDown {
-      from { opacity: 0; transform: translateY(-12px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
+    .alert-text { font-size: 0.88rem; font-weight: 500; color: #7a4a00; }
 
-    .new-alert-text { font-size: 0.88rem; font-weight: 500; color: #78350f; }
-    .new-alert-btn {
-      background: #f59e0b;
+    .alert-btn {
+      background: var(--new);
       color: white;
       border: none;
       padding: 6px 14px;
-      border-radius: 8px;
-      font-size: 0.82rem;
+      border-radius: 999px;
+      font-size: 0.8rem;
       font-weight: 600;
       cursor: pointer;
       font-family: inherit;
-      transition: background 0.2s;
+      transition: all 0.2s;
       flex-shrink: 0;
     }
-    .new-alert-btn:hover { background: #d97706; }
 
-    /* ── MAIN CONTAINER ── */
-    .container {
-      max-width: 900px;
-      margin: 0 auto;
-      padding: 20px;
-    }
+    .alert-btn:hover { transform: scale(1.05); }
 
     /* ── STATS ── */
     .stats {
       display: grid;
       grid-template-columns: repeat(3, 1fr);
-      gap: 12px;
-      margin-bottom: 20px;
+      gap: 10px;
+      margin-bottom: 16px;
+      animation: fadeUp 0.6s ease 0.1s both;
     }
-
-    .stat {
-      background: var(--surface);
-      border: 1px solid var(--line);
-      border-radius: var(--radius);
-      padding: 16px;
-      box-shadow: var(--shadow);
-      transition: transform 0.2s, box-shadow 0.2s;
-      animation: fadeUp 0.5s ease both;
-    }
-
-    .stat:nth-child(1) { animation-delay: 0.1s; }
-    .stat:nth-child(2) { animation-delay: 0.2s; }
-    .stat:nth-child(3) { animation-delay: 0.3s; }
 
     @keyframes fadeUp {
-      from { opacity: 0; transform: translateY(16px); }
+      from { opacity: 0; transform: translateY(20px); }
       to { opacity: 1; transform: translateY(0); }
     }
 
-    .stat:hover { transform: translateY(-2px); box-shadow: var(--shadow-hover); }
-    .stat-num { font-size: 1.6rem; font-weight: 600; color: var(--primary); line-height: 1; margin-bottom: 4px; }
-    .stat-label { font-size: 0.78rem; color: var(--muted); font-weight: 500; }
+    .stat {
+      glass: var(--glass);
+      background: rgba(255,255,255,0.5);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border: 1px solid rgba(255,255,255,0.7);
+      border-radius: var(--radius-sm);
+      padding: 14px 12px;
+      text-align: center;
+      box-shadow: 0 4px 16px rgba(0,0,0,0.04), inset 0 1px 0 rgba(255,255,255,0.8);
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+
+    .stat:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(0,0,0,0.08); }
+
+    .stat-num {
+      font-size: 1.7rem;
+      font-weight: 700;
+      background: linear-gradient(135deg, #007aff, #34aadc);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      line-height: 1;
+      margin-bottom: 3px;
+    }
+
+    .stat-label { font-size: 0.72rem; color: var(--muted); font-weight: 500; text-transform: uppercase; letter-spacing: 0.3px; }
 
     /* ── SEARCH ── */
-    .search-box {
-      background: var(--surface);
-      border: 1px solid var(--line);
+    .search-wrap {
+      background: rgba(255,255,255,0.55);
+      backdrop-filter: blur(24px);
+      -webkit-backdrop-filter: blur(24px);
+      border: 1px solid rgba(255,255,255,0.75);
       border-radius: var(--radius);
-      padding: 16px;
-      box-shadow: var(--shadow);
+      padding: 14px;
       margin-bottom: 16px;
-      animation: fadeUp 0.5s ease 0.4s both;
+      box-shadow: 0 4px 24px rgba(0,0,0,0.05), inset 0 1px 0 rgba(255,255,255,0.9);
+      animation: fadeUp 0.6s ease 0.2s both;
     }
 
     .search-row {
-      display: grid;
-      grid-template-columns: 1fr auto;
+      display: flex;
       gap: 10px;
-      margin-bottom: 10px;
+      margin-bottom: 12px;
     }
 
     .search-input {
-      width: 100%;
-      border: 1.5px solid var(--line);
-      border-radius: 10px;
+      flex: 1;
+      background: rgba(255,255,255,0.7);
+      border: 1.5px solid rgba(255,255,255,0.8);
+      border-radius: 12px;
       padding: 11px 16px;
       font-size: 0.95rem;
       font-family: inherit;
       color: var(--text);
-      transition: border-color 0.2s, box-shadow 0.2s;
-      background: var(--surface2);
+      transition: all 0.25s;
+      box-shadow: inset 0 2px 8px rgba(0,0,0,0.04);
     }
+
+    .search-input::placeholder { color: var(--muted); }
 
     .search-input:focus {
       outline: none;
-      border-color: var(--primary);
-      box-shadow: 0 0 0 3px var(--primary-glow);
-      background: white;
+      border-color: var(--accent);
+      background: rgba(255,255,255,0.95);
+      box-shadow: 0 0 0 3px rgba(0,122,255,0.12), inset 0 2px 8px rgba(0,0,0,0.02);
     }
 
     .refresh-btn {
-      background: var(--primary);
+      background: linear-gradient(135deg, #007aff, #34aadc);
       color: white;
       border: none;
-      border-radius: 10px;
+      border-radius: 12px;
       padding: 11px 18px;
-      font-size: 0.9rem;
+      font-size: 0.88rem;
       font-weight: 600;
       cursor: pointer;
       font-family: inherit;
-      transition: background 0.2s, transform 0.15s;
-      white-space: nowrap;
       display: flex;
       align-items: center;
       gap: 6px;
+      transition: all 0.2s;
+      box-shadow: 0 4px 12px rgba(0,122,255,0.3);
+      white-space: nowrap;
+      flex-shrink: 0;
     }
 
-    .refresh-btn:hover { background: var(--primary-dark); }
+    .refresh-btn:hover { transform: scale(1.03); box-shadow: 0 6px 16px rgba(0,122,255,0.4); }
     .refresh-btn:active { transform: scale(0.97); }
-    .refresh-btn.spinning .refresh-icon { animation: spin 0.8s linear infinite; }
-
+    .refresh-btn.spinning .ri { animation: spin 0.7s linear infinite; }
     @keyframes spin { to { transform: rotate(360deg); } }
 
-    .filter-row {
+    .filter-pills {
       display: flex;
-      gap: 8px;
+      gap: 7px;
       flex-wrap: wrap;
     }
 
-    .filter-chip {
-      border: 1.5px solid var(--line);
-      background: var(--surface2);
+    .pill {
+      background: rgba(255,255,255,0.6);
+      border: 1.5px solid rgba(255,255,255,0.8);
       color: var(--text2);
       border-radius: 999px;
       padding: 6px 14px;
-      font-size: 0.82rem;
+      font-size: 0.8rem;
       font-weight: 500;
       cursor: pointer;
       font-family: inherit;
       transition: all 0.2s;
+      backdrop-filter: blur(10px);
     }
 
-    .filter-chip:hover { border-color: var(--primary); color: var(--primary); }
-    .filter-chip.active { background: var(--primary); border-color: var(--primary); color: white; }
+    .pill:hover { background: rgba(0,122,255,0.08); border-color: rgba(0,122,255,0.3); color: var(--accent); }
+
+    .pill.active {
+      background: linear-gradient(135deg, #007aff, #34aadc);
+      border-color: transparent;
+      color: white;
+      box-shadow: 0 4px 12px rgba(0,122,255,0.3);
+    }
 
     /* ── COUNT LINE ── */
     .count-line {
-      font-size: 0.85rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 0.82rem;
       color: var(--muted);
       margin-bottom: 12px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
+      padding: 0 4px;
+      animation: fadeUp 0.6s ease 0.3s both;
     }
 
-    .last-updated { font-size: 0.78rem; color: var(--muted); }
-
-    /* ── JOB LIST ── */
-    .jobs-list { display: grid; gap: 10px; }
+    /* ── JOB CARDS ── */
+    .jobs { display: grid; gap: 10px; }
 
     .job-card {
-      background: var(--surface);
-      border: 1px solid var(--line);
+      background: rgba(255,255,255,0.55);
+      backdrop-filter: blur(24px);
+      -webkit-backdrop-filter: blur(24px);
+      border: 1px solid rgba(255,255,255,0.75);
       border-radius: var(--radius);
-      padding: 16px;
-      box-shadow: var(--shadow);
-      transition: transform 0.25s cubic-bezier(0.34, 1.2, 0.64, 1), box-shadow 0.25s ease, border-color 0.2s;
-      animation: cardIn 0.4s ease both;
-      position: relative;
-      overflow: hidden;
+      padding: 18px;
+      box-shadow: 0 2px 12px rgba(0,0,0,0.04), inset 0 1px 0 rgba(255,255,255,0.9);
+      transition: transform 0.3s cubic-bezier(0.34, 1.3, 0.64, 1), box-shadow 0.3s ease, border-color 0.2s;
+      animation: cardIn 0.5s cubic-bezier(0.34, 1.2, 0.64, 1) both;
+      cursor: default;
     }
-
-    .job-card::before {
-      content: '';
-      position: absolute;
-      left: 0; top: 0; bottom: 0;
-      width: 3px;
-      background: var(--primary);
-      opacity: 0;
-      transition: opacity 0.2s;
-    }
-
-    .job-card:hover {
-      transform: translateY(-3px);
-      box-shadow: var(--shadow-hover);
-      border-color: #cbd5e1;
-    }
-
-    .job-card:hover::before { opacity: 1; }
 
     @keyframes cardIn {
-      from { opacity: 0; transform: translateY(20px) scale(0.98); }
+      from { opacity: 0; transform: translateY(24px) scale(0.97); }
       to { opacity: 1; transform: translateY(0) scale(1); }
     }
 
-    .job-card.is-new {
-      border-color: #fcd34d;
-      background: linear-gradient(135deg, #fffbeb 0%, #ffffff 60%);
+    .job-card:hover {
+      transform: translateY(-4px) scale(1.005);
+      box-shadow: 0 12px 36px rgba(0,0,0,0.08), inset 0 1px 0 rgba(255,255,255,0.95);
+      border-color: rgba(0,122,255,0.2);
     }
 
-    .job-card.is-new::before { background: var(--new); opacity: 1; }
+    .job-card.fresh {
+      border-color: rgba(255,159,10,0.4);
+      background: rgba(255,249,235,0.65);
+    }
+
+    .job-card.fresh:hover { border-color: rgba(255,159,10,0.6); }
 
     .job-title {
       font-size: 0.97rem;
       font-weight: 600;
       color: var(--text);
-      line-height: 1.4;
+      line-height: 1.45;
       margin-bottom: 10px;
     }
 
-    .job-tags {
+    .job-chips {
       display: flex;
       flex-wrap: wrap;
       gap: 6px;
       margin-bottom: 10px;
     }
 
-    .tag {
-      font-size: 0.73rem;
-      padding: 3px 9px;
+    .chip {
+      font-size: 0.72rem;
+      padding: 3px 10px;
       border-radius: 999px;
       font-weight: 500;
       border: 1px solid transparent;
+      backdrop-filter: blur(8px);
     }
 
-    .tag-govt { background: #eff6ff; color: #1d4ed8; border-color: #bfdbfe; }
-    .tag-source { background: #f0fdf4; color: #166534; border-color: #bbf7d0; }
-    .tag-new { background: #fef3c7; color: #92400e; border-color: #fcd34d; }
-    .tag-location { background: #faf5ff; color: #6b21a8; border-color: #e9d5ff; }
+    .chip-blue { background: rgba(0,122,255,0.1); color: #0055b3; border-color: rgba(0,122,255,0.2); }
+    .chip-green { background: rgba(48,209,88,0.12); color: #1a6a30; border-color: rgba(48,209,88,0.25); }
+    .chip-orange { background: rgba(255,159,10,0.12); color: #7a4a00; border-color: rgba(255,159,10,0.3); }
+    .chip-purple { background: rgba(175,82,222,0.1); color: #5a0080; border-color: rgba(175,82,222,0.2); }
 
-    .job-meta { font-size: 0.82rem; color: var(--text2); margin-bottom: 4px; }
+    .job-detail { font-size: 0.82rem; color: var(--text2); margin-bottom: 3px; }
+
+    .time-ago { font-size: 0.73rem; color: var(--muted); margin-top: 6px; }
 
     .view-btn {
       display: inline-flex;
       align-items: center;
       gap: 6px;
       margin-top: 12px;
-      background: var(--primary);
+      background: linear-gradient(135deg, #007aff, #34aadc);
       color: white;
-      padding: 8px 16px;
-      border-radius: 8px;
+      padding: 9px 18px;
+      border-radius: 999px;
       text-decoration: none;
       font-size: 0.83rem;
       font-weight: 600;
-      transition: background 0.2s, transform 0.15s, box-shadow 0.2s;
+      transition: all 0.25s;
+      box-shadow: 0 4px 12px rgba(0,122,255,0.25);
     }
 
     .view-btn:hover {
-      background: var(--primary-dark);
-      transform: translateX(2px);
-      box-shadow: 0 4px 12px rgba(2, 132, 199, 0.3);
+      transform: scale(1.05);
+      box-shadow: 0 6px 20px rgba(0,122,255,0.4);
     }
 
     .view-btn svg { transition: transform 0.2s; }
@@ -413,54 +468,57 @@
     }
 
     .spinner {
-      width: 36px; height: 36px;
-      border: 3px solid var(--line);
-      border-top-color: var(--primary);
+      width: 34px; height: 34px;
+      border: 2.5px solid rgba(0,122,255,0.15);
+      border-top-color: var(--accent);
       border-radius: 50%;
-      animation: spin 0.8s linear infinite;
-      margin: 0 auto 16px;
+      animation: spin 0.7s linear infinite;
+      margin: 0 auto 14px;
     }
 
-    @media (max-width: 640px) {
+    @media (max-width: 480px) {
       .stats { grid-template-columns: 1fr 1fr; }
-      .search-row { grid-template-columns: 1fr; }
       .stat:nth-child(3) { grid-column: span 2; }
+      .search-row { flex-direction: column; }
     }
   </style>
 </head>
 <body>
 
-<div class="header">
-  <div class="header-inner">
-    <div class="header-top">
-      <div class="logo">
-        <div class="logo-icon">🏥</div>
-        <div class="logo-text">MedOfficer Jobs</div>
-      </div>
-      <div class="live-badge">
-        <div class="live-dot"></div>
-        Live
-      </div>
+<div class="bg">
+  <div class="bg-blob blob1"></div>
+  <div class="bg-blob blob2"></div>
+  <div class="bg-blob blob3"></div>
+  <div class="bg-blob blob4"></div>
+</div>
+
+<div class="page">
+
+  <div class="header">
+    <div class="logo-wrap">
+      <div class="logo-icon">🏥</div>
+      <div class="logo-title">MedOfficer Jobs</div>
     </div>
-    <div class="header-sub">Government medical officer jobs • Auto-updated every 6 hours</div>
+    <div class="header-sub">
+      Government medical officer jobs in India &nbsp;
+      <span class="live-pill"><span class="live-dot"></span> Live</span>
+    </div>
   </div>
-</div>
 
-<div class="new-alert" id="newAlert">
-  <div class="new-alert-inner">
-    <div class="new-alert-text" id="newAlertText">New jobs available!</div>
-    <button class="new-alert-btn" onclick="reloadJobs()">Show New Jobs</button>
+  <div class="alert-bar" id="alertBar">
+    <div class="alert-inner">
+      <div class="alert-text" id="alertText">New jobs available!</div>
+      <button class="alert-btn" onclick="reloadJobs()">View Now</button>
+    </div>
   </div>
-</div>
 
-<div class="container">
   <div class="stats">
     <div class="stat">
       <div class="stat-num" id="totalStat">—</div>
       <div class="stat-label">Active Jobs</div>
     </div>
     <div class="stat">
-      <div class="stat-num" id="newTodayStat">—</div>
+      <div class="stat-num" id="todayStat">—</div>
       <div class="stat-label">Added Today</div>
     </div>
     <div class="stat">
@@ -469,161 +527,109 @@
     </div>
   </div>
 
-  <div class="search-box">
+  <div class="search-wrap">
     <div class="search-row">
-      <input class="search-input" id="query" type="text" placeholder="Search jobs, hospitals, locations..." oninput="filterJobs()" />
+      <input class="search-input" id="query" type="text" placeholder="Search jobs, hospitals, states..." oninput="filterJobs()" />
       <button class="refresh-btn" id="refreshBtn" onclick="reloadJobs()">
-        <svg class="refresh-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 0 1 9-9 9.75 9.75 0 0 1 6.74 2.74L21 8"/><path d="M21 3v5h-5"/><path d="M21 12a9 9 0 0 1-9 9 9.75 9.75 0 0 1-6.74-2.74L3 16"/><path d="M8 16H3v5"/></svg>
+        <svg class="ri" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 0 1 9-9 9.75 9.75 0 0 1 6.74 2.74L21 8"/><path d="M21 3v5h-5"/><path d="M21 12a9 9 0 0 1-9 9 9.75 9.75 0 0 1-6.74-2.74L3 16"/><path d="M8 16H3v5"/></svg>
         Refresh
       </button>
     </div>
-    <div class="filter-row" id="filterRow">
-      <button class="filter-chip active" onclick="setFilter('', this)">All</button>
-      <button class="filter-chip" onclick="setFilter('apcareers.in', this)">AP Careers</button>
-      <button class="filter-chip" onclick="setFilter('freshersgroup.in', this)">FreshersGroup</button>
-      <button class="filter-chip" onclick="setFilter('jobstail.com', this)">JobsTail</button>
-      <button class="filter-chip" onclick="setFilter('freejobalert.com', this)">FreeJobAlert</button>
-      <button class="filter-chip" onclick="setFilter('manual', this)">Manual</button>
+    <div class="filter-pills" id="filterPills">
+      <button class="pill active" onclick="setFilter('', this)">All</button>
+      <button class="pill" onclick="setFilter('apcareers.in', this)">AP Careers</button>
+      <button class="pill" onclick="setFilter('freshersgroup.in', this)">FreshersGroup</button>
+      <button class="pill" onclick="setFilter('jobstail.com', this)">JobsTail</button>
+      <button class="pill" onclick="setFilter('freejobalert.com', this)">FreeJobAlert</button>
+      <button class="pill" onclick="setFilter('manual', this)">Manual</button>
     </div>
   </div>
 
   <div class="count-line">
     <span id="countText"></span>
-    <span class="last-updated" id="lastUpdated"></span>
+    <span id="updatedAt"></span>
   </div>
 
-  <div class="jobs-list" id="jobsList">
+  <div class="jobs" id="jobsList">
     <div class="empty">
       <div class="spinner"></div>
       Loading latest jobs…
     </div>
   </div>
+
 </div>
 
 <script>
-  const SUPABASE_URL = 'https://qgcpbabcxlyuxfuezipm.supabase.co';
-  const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InFnY3BiYWJjeGx5dXhmdWV6aXBtIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzY4NTA3NTAsImV4cCI6MjA5MjQyNjc1MH0.fy7tKDnrfhDjh4iLzPjFvzdd_jLvDV0M4CVppaXu3kU';
+  const SB_URL = 'https://qgcpbabcxlyuxfuezipm.supabase.co';
+  const SB_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InFnY3BiYWJjeGx5dXhmdWV6aXBtIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzY4NTA3NTAsImV4cCI6MjA5MjQyNjc1MH0.fy7tKDnrfhDjh4iLzPjFvzdd_jLvDV0M4CVppaXu3kU';
 
-  let allJobs = [];
-  let activeFilter = '';
-  let lastJobCount = 0;
+  let allJobs = [], activeFilter = '', lastCount = 0;
 
-  const esc = v => String(v ?? '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
-
-  function isNew(d) {
-    if (!d) return false;
-    return (Date.now() - new Date(d).getTime()) < 24 * 60 * 60 * 1000;
-  }
-
-  function isToday(d) {
-    if (!d) return false;
-    const now = new Date();
-    const job = new Date(d);
-    return job.toDateString() === now.toDateString();
-  }
-
-  function timeAgo(d) {
+  const esc = v => String(v??'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+  const isFresh = d => d && (Date.now()-new Date(d).getTime()) < 24*3600000;
+  const isToday = d => d && new Date(d).toDateString()===new Date().toDateString();
+  const ago = d => {
     if (!d) return '';
-    const diff = (Date.now() - new Date(d).getTime()) / 60000;
-    if (diff < 60) return `${Math.floor(diff)}m ago`;
-    if (diff < 1440) return `${Math.floor(diff/60)}h ago`;
-    return `${Math.floor(diff/1440)}d ago`;
+    const m = (Date.now()-new Date(d).getTime())/60000;
+    if (m<60) return `${Math.floor(m)}m ago`;
+    if (m<1440) return `${Math.floor(m/60)}h ago`;
+    return `${Math.floor(m/1440)}d ago`;
+  };
+
+  function card(job, i) {
+    const fresh = isFresh(job.created_at);
+    return `<div class="job-card${fresh?' fresh':''}" style="animation-delay:${Math.min(i*0.045,0.6)}s">
+      <div class="job-title">${esc(job.title)}</div>
+      <div class="job-chips">
+        <span class="chip chip-blue">${esc(job.job_type||'Government')}</span>
+        ${job.source_site?`<span class="chip chip-green">${esc(job.source_site)}</span>`:''}
+        ${job.location?`<span class="chip chip-purple">📍 ${esc(job.location)}</span>`:''}
+        ${job.state?`<span class="chip chip-purple">${esc(job.state)}</span>`:''}
+        ${fresh?'<span class="chip chip-orange">🆕 New</span>':''}
+      </div>
+      ${job.organization?`<div class="job-detail">🏢 ${esc(job.organization)}</div>`:''}
+      ${job.deadline?`<div class="job-detail">📅 Last date: ${esc(job.deadline)}</div>`:''}
+      ${job.vacancies?`<div class="job-detail">👥 ${esc(job.vacancies)} vacancies</div>`:''}
+      <div class="time-ago">${ago(job.created_at)}</div>
+      ${job.apply_url?`<a href="${esc(job.apply_url)}" target="_blank" class="view-btn">View Job <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg></a>`:''}
+    </div>`;
   }
 
-  function card(job, index) {
-    const fresh = isNew(job.created_at);
-    return `
-      <div class="job-card ${fresh ? 'is-new' : ''}" style="animation-delay:${Math.min(index * 0.04, 0.5)}s">
-        <div class="job-title">${esc(job.title)}</div>
-        <div class="job-tags">
-          <span class="tag tag-govt">${esc(job.job_type || 'Government')}</span>
-          ${job.source_site ? `<span class="tag tag-source">${esc(job.source_site)}</span>` : ''}
-          ${job.location ? `<span class="tag tag-location">📍 ${esc(job.location)}</span>` : ''}
-          ${job.state ? `<span class="tag tag-location">${esc(job.state)}</span>` : ''}
-          ${fresh ? '<span class="tag tag-new">🆕 New</span>' : ''}
-        </div>
-        ${job.organization ? `<div class="job-meta">🏢 ${esc(job.organization)}</div>` : ''}
-        ${job.deadline ? `<div class="job-meta">📅 Last date: ${esc(job.deadline)}</div>` : ''}
-        ${job.vacancies ? `<div class="job-meta">👥 ${esc(job.vacancies)} vacancies</div>` : ''}
-        <div class="job-meta" style="color:#94a3b8;font-size:0.75rem;margin-top:4px">${timeAgo(job.created_at)}</div>
-        ${job.apply_url ? `
-          <a href="${esc(job.apply_url)}" target="_blank" class="view-btn">
-            View Job
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
-          </a>` : ''}
-      </div>`;
-  }
-
-  async function loadJobs(silent = false) {
-    if (!silent) {
-      document.getElementById('jobsList').innerHTML = '<div class="empty"><div class="spinner"></div>Loading latest jobs…</div>';
-    }
-    const btn = document.getElementById('refreshBtn');
+  async function loadJobs(silent=false) {
+    if (!silent) document.getElementById('jobsList').innerHTML='<div class="empty"><div class="spinner"></div>Loading latest jobs…</div>';
+    const btn=document.getElementById('refreshBtn');
     btn.classList.add('spinning');
-
     try {
-      const res = await fetch(
-        `${SUPABASE_URL}/rest/v1/jobs?select=*&is_active=eq.true&order=created_at.desc&limit=500`,
-        { headers: { 'apikey': SUPABASE_KEY, 'Authorization': 'Bearer ' + SUPABASE_KEY } }
-      );
-      const jobs = await res.json();
-
-      if (silent && jobs.length > lastJobCount) {
-        const diff = jobs.length - lastJobCount;
-        document.getElementById('newAlertText').textContent = `${diff} new job${diff > 1 ? 's' : ''} added!`;
-        document.getElementById('newAlert').classList.add('show');
+      const res=await fetch(`${SB_URL}/rest/v1/jobs?select=*&is_active=eq.true&order=created_at.desc&limit=500`,
+        {headers:{'apikey':SB_KEY,'Authorization':'Bearer '+SB_KEY}});
+      const jobs=await res.json();
+      if (silent && jobs.length>lastCount) {
+        const d=jobs.length-lastCount;
+        document.getElementById('alertText').textContent=`${d} new job${d>1?'s':''} just added!`;
+        document.getElementById('alertBar').classList.add('show');
       }
-
-      allJobs = jobs;
-      lastJobCount = jobs.length;
-
-      document.getElementById('totalStat').textContent = jobs.length;
-      const todayCount = jobs.filter(j => isToday(j.created_at)).length;
-      document.getElementById('newTodayStat').textContent = todayCount;
-      document.getElementById('lastUpdated').textContent = 'Updated ' + new Date().toLocaleTimeString('en-IN', {hour:'2-digit',minute:'2-digit'});
-
+      allJobs=jobs; lastCount=jobs.length;
+      document.getElementById('totalStat').textContent=jobs.length;
+      document.getElementById('todayStat').textContent=jobs.filter(j=>isToday(j.created_at)).length;
+      document.getElementById('updatedAt').textContent='Updated '+new Date().toLocaleTimeString('en-IN',{hour:'2-digit',minute:'2-digit'});
       filterJobs();
     } catch(e) {
-      if (!silent) {
-        document.getElementById('jobsList').innerHTML = '<div class="empty">Unable to load jobs. Tap Refresh to try again.</div>';
-      }
+      if (!silent) document.getElementById('jobsList').innerHTML='<div class="empty">Unable to load. Tap Refresh.</div>';
     }
     btn.classList.remove('spinning');
   }
 
   function reloadJobs() {
-    document.getElementById('newAlert').classList.remove('show');
+    document.getElementById('alertBar').classList.remove('show');
     loadJobs(false);
   }
 
-  function setFilter(source, el) {
-    activeFilter = source;
-    document.querySelectorAll('.filter-chip').forEach(c => c.classList.remove('active'));
+  function setFilter(src, el) {
+    activeFilter=src;
+    document.querySelectorAll('.pill').forEach(p=>p.classList.remove('active'));
     el.classList.add('active');
     filterJobs();
   }
 
   function filterJobs() {
-    const q = document.getElementById('query').value.toLowerCase();
-    const filtered = allJobs.filter(job => {
-      const matchQ = !q ||
-        (job.title||'').toLowerCase().includes(q) ||
-        (job.location||'').toLowerCase().includes(q) ||
-        (job.organization||'').toLowerCase().includes(q) ||
-        (job.state||'').toLowerCase().includes(q);
-      const matchSource = !activeFilter || job.source_site === activeFilter;
-      return matchQ && matchSource;
-    });
-
-    document.getElementById('countText').textContent = `Showing ${filtered.length} jobs`;
-    document.getElementById('jobsList').innerHTML = filtered.length
-      ? filtered.map((j, i) => card(j, i)).join('')
-      : '<div class="empty">No jobs match your search.</div>';
-  }
-
-  // Auto-check for new jobs every 5 minutes silently
-  loadJobs();
-  setInterval(() => loadJobs(true), 5 * 60 * 1000);
-</script>
-</body>
-</html>
+    const q=document.getEl
