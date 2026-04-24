@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>MedOfficer Jobs — Government Medical Jobs in India</title>
+  <meta name="description" content="Latest verified government medical officer jobs in India. Updated automatically every 6 hours." />
+  <style>
+    :root {
+      --bg: #f7f8fa;
+      --card: #ffffff;
+      --text: #1f2937;
+      --muted: #6b7280;
+      --line: #e5e7eb;
+      --primary: #0f766e;
+      --primary-soft: #ecfeff;
+    }
+
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+    }
+
+    .container { max-width: 900px; margin: 0 auto; padding: 20px; }
+
+    header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 18px;
+    }
+
+    h1 { font-size: 1.35rem; margin: 0; }
+    .meta { color: var(--muted); font-size: 0.9rem; }
+
+    .toolbar {
+      display: grid;
+      grid-template-columns: 1fr auto auto;
+      gap: 10px;
+      margin-bottom: 12px;
+    }
+
+    .filters {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 16px;
+      flex-wrap: wrap;
+    }
+
+    input, button, select {
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      padding: 10px 12px;
+      font-size: 0.95rem;
+      background: white;
+    }
+
+    input:focus, select:focus {
+      outline: 2px solid #99f6e4;
+      border-color: var(--primary);
+    }
+
+    button {
+      background: var(--primary);
+      color: white;
+      cursor: pointer;
+      border-color: var(--primary);
+      white-space: nowrap;
+    }
+
+    button:hover { background: #0d6560; }
+
+    .stats {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 10px;
+      margin-bottom: 16px;
+    }
+
+    .stat {
+      background: var(--card);
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      padding: 12px;
+    }
+
+    .stat strong { display: block; font-size: 1.1rem; }
+    .stat span { color: var(--muted); font-size: 0.82rem; }
+
+    .list { display: grid; gap: 10px; }
+
+    .job {
+      background: var(--card);
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      padding: 14px;
+      transition: box-shadow 0.2s;
+    }
+
+    .job:hover { box-shadow: 0 2px 8px rgba(0,0,0,0.08); }
+
+    .job h2 {
+      margin: 0 0 8px 0;
+      font-size: 1rem;
+      line-height: 1.35;
+    }
+
+    .tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin-bottom: 8px;
+    }
+
+    .tag {
+      font-size: 0.78rem;
+      padding: 3px 8px;
+      border-radius: 999px;
+      border: 1px solid var(--line);
+      background: #fafafa;
+      color: #374151;
+    }
+
+    .tag.source { background: #eff6ff; border-color: #bfdbfe; color: #1d4ed8; }
+    .tag.govt { background: var(--primary-soft); border-color: #a7f3d0; color: #065f46; }
+
+    .muted { color: var(--muted); font-size: 0.85rem; margin-bottom: 4px; }
+
+    .apply-btn {
+      display: inline-block;
+      margin-top: 10px;
+      background: var(--primary);
+      color: white;
+      padding: 7px 14px;
+      border-radius: 8px;
+      text-decoration: none;
+      font-size: 0.85rem;
+    }
+
+    .apply-btn:hover { background: #0d6560; }
+
+    .empty { text-align: center; color: var(--muted); padding: 40px; }
+    .count { color: var(--muted); font-size: 0.88rem; margin-bottom: 12px; }
+
+    @media (max-width: 640px) {
+      .stats { grid-template-columns: 1fr 1fr; }
+      .toolbar { grid-template-columns: 1fr auto; }
+    }
+  </style>
+</head>
+<body>
+  <main class="container">
+    <header>
+      <div>
+        <h1>🏥 MedOfficer Jobs</h1>
+        <div class="meta">Government medical officer jobs • Auto-updated every 6 hours</div>
+      </div>
+    </header>
+
+    <section class="toolbar">
+      <input id="query" type="text" placeholder="Search title, location, organization..." oninput="filterJobs()" />
+      <select id="source-filter" onchange="filterJobs()">
+        <option value="">All Sources</option>
+        <option value="freejobalert.com">FreeJobAlert</option>
+        <option value="apcareers.in">AP Careers</option>
+        <option value="freshersgroup.in">FreshersGroup</option>
+        <option value="jobstail.com">JobsTail</option>
+        <option value="manual">Manually Added</option>
+      </select>
+      <button onclick="loadJobs()">Refresh</button>
+    </section>
+
+    <section class="stats">
+      <article class="stat"><strong id="total">-</strong><span>Total jobs</span></article>
+      <article class="stat"><strong id="scraped">-</strong><span>Auto-scraped</span></article>
+      <article class="stat"><strong id="sources">8</strong><span>Sources</span></article>
+    </section>
+
+    <div class="count" id="count"></div>
+    <section id="jobs" class="list">
+      <div class="empty">Loading jobs…</div>
+    </section>
+  </main>
+
+  <script>
+    const SUPABASE_URL = 'https://qgcpbabcxlyuxfuezipm.supabase.co';
+    const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InFnY3BiYWJjeGx5dXhmdWV6aXBtIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzY4NTA3NTAsImV4cCI6MjA5MjQyNjc1MH0.fy7tKDnrfhDjh4iLzPjFvzdd_jLvDV0M4CVppaXu3kU';
+
+    let allJobs = [];
+
+    const esc = (v) => String(v ?? '')
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;');
+
+    function card(job) {
+      return `
+        <article class="job">
+          <h2>${esc(job.title)}</h2>
+          <div class="tags">
+            ${job.job_type ? `<span class="tag govt">${esc(job.job_type)}</span>` : '<span class="tag govt">Government</span>'}
+            ${job.location ? `<span class="tag">${esc(job.location)}</span>` : ''}
+            ${job.state ? `<span class="tag">${esc(job.state)}</span>` : ''}
+            ${job.source_site ? `<span class="tag source">${esc(job.source_site)}</span>` : ''}
+          </div>
+          ${job.organization ? `<div class="muted">🏢 ${esc(job.organization)}</div>` : ''}
+          ${job.deadline ? `<div class="muted">📅 Last date: ${esc(job.deadline)}</div>` : ''}
+          ${job.vacancies ? `<div class="muted">👥 Vacancies: ${esc(job.vacancies)}</div>` : ''}
+          ${job.apply_url ? `<a href="${esc(job.apply_url)}" target="_blank" class="apply-btn">View Job →</a>` : ''}
+        </article>
+      `;
+    }
+
+    async function loadJobs() {
+      const list = document.getElementById('jobs');
+      list.innerHTML = '<div class="empty">Loading jobs…</div>';
+
+      try {
+        const res = await fetch(
+          `${SUPABASE_URL}/rest/v1/jobs?select=*&order=created_at.desc&limit=500`,
+          { headers: { 'apikey': SUPABASE_KEY, 'Authorization': 'Bearer ' + SUPABASE_KEY } }
+        );
+        allJobs = await res.json();
+
+        // Update stats
+        document.getElementById('total').textContent = allJobs.length;
+        const scraped = allJobs.filter(j => j.source_site && j.source_site !== 'manual').length;
+        document.getElementById('scraped').textContent = scraped;
+
+        filterJobs();
+      } catch(e) {
+        list.innerHTML = '<div class="empty">Unable to load jobs. Please try again.</div>';
+      }
+    }
+
+    function filterJobs() {
+      const q = document.getElementById('query').value.toLowerCase();
+      const source = document.getElementById('source-filter').value;
+
+      const filtered = allJobs.filter(job => {
+        const matchQ = !q ||
+          (job.title||'').toLowerCase().includes(q) ||
+          (job.location||'').toLowerCase().includes(q) ||
+          (job.organization||'').toLowerCase().includes(q) ||
+          (job.state||'').toLowerCase().includes(q);
+        const matchSource = !source || job.source_site === source;
+        return matchQ && matchSource;
+      });
+
+      document.getElementById('count').textContent = `Showing ${filtered.length} jobs`;
+
+      if (!filtered.length) {
+        document.getElementById('jobs').innerHTML = '<div class="empty">No jobs found.</div>';
+        return;
+      }
+
+      document.getElementById('jobs').innerHTML = filtered.map(card).join('');
+    }
+
+    loadJobs();
+  </script>
+</body>
+</html>
